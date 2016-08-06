@@ -1,10 +1,8 @@
 import { createStore, applyMiddleware } from 'redux';
 import createLogger from 'redux-logger';
 import appReducer from './reducer.js';
-import todosSocketListeners from 'Todo/socket-listeners/todos.js';
 
 const applySocketListeners = (store) => {
-    todosSocketListeners(store);
 };
 
 const configureStore = () => {
