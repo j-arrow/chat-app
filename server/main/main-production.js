@@ -13,7 +13,6 @@ var r = require('rethinkdb');
 var webpackConfig = require('../../webpack.production.config.js');
 
 var handleSocket = require('../socket/handler.js');
-var todoSocketHandler = require('../modules/Todo/socketHandler.js');
 
 app.use(
     webpackConfig.output.publicPath,
@@ -35,7 +34,6 @@ r.connect({
     io.on('connection', function (socket) {
 
         handleSocket([
-            todoSocketHandler
         ])(socket, r, connection);
 
     });

@@ -4,6 +4,7 @@
   "description": "ReactJS + Express + RethinkDB Example app",
   "main": "index.js",
   "scripts": {
+    "bundle": "./node_modules/.bin/webpack --config ./webpack.config.js",
     "start": "node index-production.js",
     "dev": "node index-dev.js"
   },
