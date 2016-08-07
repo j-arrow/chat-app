@@ -23,6 +23,11 @@ module.exports = {
         }]
     },
     resolve: {
+      alias: {
+        $shared: path.resolve('./shared'),
+        $client: path.resolve('./client/modules'),
+        $server: path.resolve('./server/modules')
+      },
       modulesDirectories: [
         'modules',
         'node_modules',

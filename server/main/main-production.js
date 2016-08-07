@@ -13,6 +13,7 @@ var r = require('rethinkdb');
 var webpackConfig = require('../../webpack.production.config.js');
 
 var handleSocket = require('../socket/handler.js');
+var authSocketHandler = require('../modules/User/authSocketHandler.js');
 
 app.use(
     webpackConfig.output.publicPath,
@@ -34,6 +35,7 @@ r.connect({
     io.on('connection', function (socket) {
 
         handleSocket([
+            authSocketHandler
         ])(socket, r, connection);
 
     });

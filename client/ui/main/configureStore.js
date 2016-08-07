@@ -1,8 +1,10 @@
 import { createStore, applyMiddleware } from 'redux';
 import createLogger from 'redux-logger';
 import appReducer from './reducer.js';
+import authSocketListeners from '../modules/User/socketListeners/auth.js';
 
 const applySocketListeners = (store) => {
+    authSocketListeners(store);
 };
 
 const configureStore = () => {
