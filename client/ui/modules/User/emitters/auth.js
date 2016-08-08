@@ -5,7 +5,10 @@ export const logIn = (payload, handleLogIn, errorHandler) => {
     const socket = io.connect('/');
 
     socket.emit(outActions.LOG_IN, payload);
-    socket.on(inActions.LOG_IN_ERROR, errorHandler);
+
+    socket.on(inActions.LOG_IN_ERROR, errorMessage => {
+        console.log(errorMessage);
+    });
 
     socket.on(inActions.LOG_IN_SUCCESS, user => {
         console.log(user);

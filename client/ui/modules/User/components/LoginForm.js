@@ -46,11 +46,7 @@ class LoginForm extends React.Component {
 
         emitters.logIn({
                 ...this.state,
-            },
-            handleLogIn,
-            errorMessage => {
-                console.log(errorMessage);
-            });
+            }, logIn);
     }
 
     render() {
@@ -91,14 +87,14 @@ let LoginFormContainer = ({
         handleLogIn={dispatchLogIn} />
 )
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, ownProps) => ({
     loggedIn: state.auth.loggedIn,
-});
-
-const mapDispatchToProps = (dispatch, ownProps) => ({
     redirectToHome: () => {
         ownProps.router.push('/')
     },
+});
+
+const mapDispatchToProps = (dispatch) => ({
     dispatchLogIn: (user) => {
         dispatch(logIn(user));
     },
