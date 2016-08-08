@@ -1,7 +1,7 @@
 {
-  "name": "react-express-rethinkdb-example-app",
+  "name": "chat-app",
   "version": "1.0.0",
-  "description": "ReactJS + Express + RethinkDB Example app",
+  "description": "Chat app",
   "main": "index.js",
   "scripts": {
     "bundle": "./node_modules/.bin/webpack --config ./webpack.production.config.js --watch",
@@ -12,10 +12,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/j-arrow/react-express-rethinkdb-example-app.git"
+    "url": "https://github.com/j-arrow/chat-app.git"
   },
   "bugs": {
-    "url": "https://github.com/j-arrow/react-express-rethinkdb-example-app/issues"
+    "url": "https://github.com/j-arrow/chat-app/issues"
   },
   "keywords": [
     "react",
