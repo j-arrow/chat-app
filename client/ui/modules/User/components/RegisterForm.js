@@ -1,17 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router';
-import { logIn } from '../reducers/auth.js';
 
-import * as emitters from '../emitters/auth.js';
-
-class LoginForm extends React.Component {
+class RegisterForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             username: '',
             password: '',
-        };
+            repeatPassword: '',
+        }
     }
 
     componentDidUpdate() {
@@ -32,30 +30,31 @@ class LoginForm extends React.Component {
         e.preventDefault();
         // TODO client-side validation
         this.setState({
-            password: e.target.value
+            password: e.target.value,
         });
     }
 
-    handleUserLogin(e) {
+    handleRepeatPasswordChange(e) {
+        e.preventDefault();
+        // TODO client-side validation
+        this.setState({
+            repeatPassword: e.target.value,
+        });
+    }
+
+    handleUserRegister(e) {
         e.preventDefault();
 
-        let logIn = (user) => {
-            this.props.handleLogIn(user);
-            this.props.redirectToHome();
-        }
-
-        emitters.logIn({
-                ...this.state,
-            }, logIn);
+        // TODO emit register event
     }
 
     render() {
         return (
             <div>
-                <h2>Login form</h2>
+                <h2>Register form</h2>
 
                 <form
-                    onSubmit={this.handleUserLogin.bind(this)}>
+                    onSubmit={this.handleUserRegister.bind(this)}>
                     <input
                         type='text'
                         placeholder='username'
@@ -66,47 +65,48 @@ class LoginForm extends React.Component {
                         placeholder='password'
                         defaultValue={this.state.password}
                         onChange={this.handlePasswordChange.bind(this)} />
+                    <input
+                        type='password'
+                        placeholder='repeat password'
+                        defaultValue={this.state.repeatPassword}
+                        onChange={this.handleRepeatPasswordChange.bind(this)} />
                     <button
                         type='submit'>
-                        Log in!
+                        Register!
                     </button>
                 </form>
 
-                <Link to='/register'>Register!</Link>
+                <Link to='/login'>Log in!</Link>
             </div>
         );
     };
 };
 
-let LoginFormContainer = ({
+let RegisterFormContainer = ({
     loggedIn,
     redirectToHome,
-    dispatchLogIn,
 }) => (
-    <LoginForm
+    <RegisterForm
         loggedIn={loggedIn}
-        redirectToHome={redirectToHome}
-        handleLogIn={dispatchLogIn} />
-)
+        redirectToHome={redirectToHome} />
+);
 
 const mapStateToProps = (state, ownProps) => ({
     loggedIn: state.auth.loggedIn,
     redirectToHome: () => {
-        ownProps.router.push('/')
-    },
+        ownProps.router.push('/');
+    }
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    dispatchLogIn: (user) => {
-        dispatch(logIn(user));
-    },
+
 });
 
-LoginFormContainer = withRouter(
+RegisterFormContainer = withRouter(
     connect(
         mapStateToProps,
         mapDispatchToProps
-    )(LoginFormContainer)
+    )(RegisterFormContainer)
 );
 
-export default LoginFormContainer;
+export default RegisterFormContainer;
