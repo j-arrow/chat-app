@@ -1,16 +1,16 @@
 var defaultState = {
     loggedIn: false,
     username: null,
-    id: null
 };
 
 export const LOG_IN = 'auth:LOG_IN';
 export const LOG_IN_SUCCESS = 'auth:LOG_IN_SUCCESS';
+export const LOG_IN_ERROR = 'auth:LOG_IN_ERROR';
 
-export const logIn = (credentials) => ({
+export const logIn = (user) => ({
     type: LOG_IN,
-    username: credentials.username,
-    password: credentials.password,
+    username: user.username,
+    password: user.password,
 });
 
 const auth = (state = defaultState, action) => {
@@ -19,7 +19,6 @@ const auth = (state = defaultState, action) => {
             return {
                 loggedIn: true,
                 username: action.username,
-                id: action.id
             };
         default:
             return state;

@@ -1,14 +1,16 @@
 import { createStore, applyMiddleware } from 'redux';
 import createLogger from 'redux-logger';
 import appReducer from './reducer.js';
-import authSocketListeners from '../modules/User/socketListeners/auth.js';
 
-const applySocketListeners = (store) => {
-    authSocketListeners(store);
-};
+import * as storage from 'redux-storage';
+const mainReducer = storage.reducer(appReducer);
+import createEngine from 'redux-storage-engine-localstorage';
+const engine = createEngine('talk2me-persisted-store');
 
 const configureStore = () => {
-    const middlewares = [];
+    const localStorageMiddleware = storage.createMiddleware(engine);
+
+    const middlewares = [localStorageMiddleware];
     if (process.env.NODE_ENV !== 'production') {
         middlewares.push(createLogger({
             collapsed: true,
@@ -18,11 +20,12 @@ const configureStore = () => {
     }
 
     const store = createStore(
-        appReducer,
+        mainReducer,
         applyMiddleware(...middlewares)
     );
-    applySocketListeners(store);
 
+    const load = storage.createLoader(engine);
+    load(store);
     return store;
 };
 

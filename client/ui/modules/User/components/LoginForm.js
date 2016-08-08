@@ -1,15 +1,23 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import { logIn } from '../reducers/auth.js';
 
 import * as emitters from '../emitters/auth.js';
-var socket = io.connect('/');
 
 class LoginForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
-            password: '',
+            username: 'root',
+            password: 'root123',
         };
+    }
+
+    componentDidUpdate() {
+        if (this.props.loggedIn) {
+            this.props.redirectToHome();
+        }
     }
 
     handleUsernameChange(e) {
@@ -31,11 +39,18 @@ class LoginForm extends React.Component {
     handleUserLogin(e) {
         e.preventDefault();
 
-        let { logIn } = this.props;
-        emitters.logIn(
-            socket,
-            this.state
-        );
+        let logIn = (user) => {
+            this.props.handleLogIn(user);
+            this.props.redirectToHome();
+        }
+
+        emitters.logIn({
+                ...this.state,
+            },
+            handleLogIn,
+            errorMessage => {
+                console.log(errorMessage);
+            });
     }
 
     render() {
@@ -65,6 +80,35 @@ class LoginForm extends React.Component {
     }
 }
 
+let LoginFormContainer = ({
+    loggedIn,
+    redirectToHome,
+    dispatchLogIn,
+}) => (
+    <LoginForm
+        loggedIn={loggedIn}
+        redirectToHome={redirectToHome}
+        handleLogIn={dispatchLogIn} />
+)
 
+const mapStateToProps = (state) => ({
+    loggedIn: state.auth.loggedIn,
+});
 
-export default LoginForm;
+const mapDispatchToProps = (dispatch, ownProps) => ({
+    redirectToHome: () => {
+        ownProps.router.push('/')
+    },
+    dispatchLogIn: (user) => {
+        dispatch(logIn(user));
+    },
+});
+
+LoginFormContainer = withRouter(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )(LoginFormContainer)
+);
+
+export default LoginFormContainer;
