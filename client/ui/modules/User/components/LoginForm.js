@@ -39,8 +39,8 @@ class LoginForm extends React.Component {
     handleUserLogin(e) {
         e.preventDefault();
 
-        let logIn = (credentials) => {
-            this.props.handleLogIn(credentials);
+        let logIn = (username) => {
+            this.props.handleLogIn(username);
             this.props.redirectToHome();
         };
 
@@ -97,8 +97,8 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    dispatchLogIn: (user) => {
-        dispatch(logIn(user));
+    dispatchLogIn: (username) => {
+        dispatch(logIn(username));
     },
 });
 

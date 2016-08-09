@@ -24,7 +24,7 @@ export const logIn = (payload, handleLogIn) => {
         console.log(errorMessage);
     });
 
-    socket.on(inActions.LOG_IN_SUCCESS, user => {
-        handleLogIn(user);
+    socket.on(inActions.LOG_IN_SUCCESS, username => {
+        handleLogIn(username);
     });
 };

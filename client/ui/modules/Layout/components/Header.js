@@ -3,17 +3,20 @@ import { connect } from 'react-redux';
 import { logOut } from 'User/reducers/auth.js';
 
 let Header = ({
-    logOut,
+    username,
+    handleLogOut,
 }) => (
-    <button
-        onClick={logOut}
-        >
-        Log out!
-    </button>
+    <div>
+        <span>Hello, {username}!</span>
+        <button
+            onClick={handleLogOut}>
+            Log out!
+        </button>
+    </div>
 );
 
 const mapDispatchToProps = (dispatch) => ({
-    logOut: () => {
+    handleLogOut: () => {
         dispatch(logOut());
     }
 });

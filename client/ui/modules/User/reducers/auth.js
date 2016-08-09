@@ -18,10 +18,9 @@ export const register = (registrationData) => ({
     repeatPassword: registrationData.repeatPassword,
 });
 
-export const logIn = (credentials) => ({
+export const logIn = (username) => ({
     type: LOG_IN,
-    username: credentials.username,
-    password: credentials.password,
+    username,
 });
 
 export const logOut = () => ({

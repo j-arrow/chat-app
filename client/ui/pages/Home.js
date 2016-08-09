@@ -11,9 +11,12 @@ class HomePage extends React.Component {
     }
 
     render() {
+        const { username } = this.props;
+
         return (
             <div>
-                <Header />
+                <Header
+                    username={username} />
                 <h1>Home page</h1>
             </div>
         );
@@ -22,15 +25,18 @@ class HomePage extends React.Component {
 
 let HomePageContainer = ({
     loggedIn,
+    username,
     redirectToLogin,
 }) => (
     <HomePage
         loggedIn={loggedIn}
+        username={username}
         redirectToLogin={redirectToLogin} />
 );
 
 const mapStateToProps = (state, ownProps) => ({
     loggedIn: state.auth.loggedIn,
+    username: state.auth.username,
     redirectToLogin: () => {
         ownProps.router.push('/login')
     },

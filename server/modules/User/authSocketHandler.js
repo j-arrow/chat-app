@@ -90,7 +90,7 @@ module.exports = function(socket, rethinkDB, connection) {
                             throw err;
                         }
                     } else {
-                        socket.emit(ENTITY_NAME + LOG_IN_SUCCESS_SUFFIX, credentials.username);
+                        socket.emit(ENTITY_NAME + LOG_IN_SUCCESS_SUFFIX, row.username);
                     }
 
                 });
