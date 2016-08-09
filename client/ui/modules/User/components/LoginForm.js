@@ -1,4 +1,5 @@
 import React from 'react';
+import RaisedButton from 'material-ui/RaisedButton';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router';
 import { logIn } from '../reducers/auth.js';
@@ -54,6 +55,7 @@ class LoginForm extends React.Component {
             <div>
                 <h2>Login form</h2>
 
+                <RaisedButton label="Hey hi hello!" />
                 <form
                     onSubmit={this.handleUserLogin.bind(this)}>
                     <input
