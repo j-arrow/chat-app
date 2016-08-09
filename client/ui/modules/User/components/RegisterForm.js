@@ -1,6 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router';
+import { register } from '../reducers/auth.js';
+
+import * as emitters from '../emitters/auth.js';
 
 class RegisterForm extends React.Component {
     constructor(props) {
@@ -45,7 +48,14 @@ class RegisterForm extends React.Component {
     handleUserRegister(e) {
         e.preventDefault();
 
-        // TODO emit register event
+        let register = (registrationData) => {
+            this.props.handleRegister(registrationData);
+            this.props.redirectToLogin();
+        };
+
+        emitters.register({
+            ...this.state,
+        }, register)
     }
 
     render() {
@@ -85,21 +95,30 @@ class RegisterForm extends React.Component {
 let RegisterFormContainer = ({
     loggedIn,
     redirectToHome,
+    redirectToLogin,
+    dispatchRegister,
 }) => (
     <RegisterForm
         loggedIn={loggedIn}
-        redirectToHome={redirectToHome} />
+        redirectToHome={redirectToHome}
+        redirectToLogin={redirectToLogin}
+        handleRegister={dispatchRegister} />
 );
 
 const mapStateToProps = (state, ownProps) => ({
     loggedIn: state.auth.loggedIn,
     redirectToHome: () => {
         ownProps.router.push('/');
+    },
+    redirectToLogin: () => {
+        ownProps.router.push('/login');
     }
 });
 
 const mapDispatchToProps = (dispatch) => ({
-
+    dispatchRegister: (registrationData) => {
+        dispatch(register(registrationData));
+    },
 });
 
 RegisterFormContainer = withRouter(

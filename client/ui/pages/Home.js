@@ -1,4 +1,5 @@
 import React from 'react';
+import Header from 'Layout/components/Header.js';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 
@@ -11,7 +12,10 @@ class HomePage extends React.Component {
 
     render() {
         return (
-            <h1>Home page</h1>
+            <div>
+                <Header />
+                <h1>Home page</h1>
+            </div>
         );
     }
 }

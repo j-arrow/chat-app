@@ -39,14 +39,14 @@ class LoginForm extends React.Component {
     handleUserLogin(e) {
         e.preventDefault();
 
-        let logIn = (user) => {
-            this.props.handleLogIn(user);
+        let logIn = (credentials) => {
+            this.props.handleLogIn(credentials);
             this.props.redirectToHome();
-        }
+        };
 
         emitters.logIn({
-                ...this.state,
-            }, logIn);
+            ...this.state,
+        }, logIn);
     }
 
     render() {
