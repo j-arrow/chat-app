@@ -5,7 +5,7 @@ var TABLE_NAME = 'user';
 var ENTITY_NAME = 'auth';
 
 var REGISTER_SUCCESS_SUFFIX = ':REGISTER_SUCCESS';
-var REGISTER_ERROR_SUFFIX = ':REGISTER_SUCCESS';
+var REGISTER_ERROR_SUFFIX = ':REGISTER_ERROR';
 var LOG_IN_SUCCESS_SUFFIX = ':LOG_IN_SUCCESS';
 var LOG_IN_ERROR_SUFFIX = ':LOG_IN_ERROR';
 
@@ -48,7 +48,8 @@ module.exports = function(socket, rethinkDB, connection) {
                             socket.emit(ENTITY_NAME + REGISTER_SUCCESS_SUFFIX, registrationData.username);
                             return;
                         } else {
-                            throw err;
+                            var errorMessage = 'Registration error';
+                            socket.emit(ENTITY_NAME + REGISTER_ERROR_SUFFIX, errorMessage);
                         }
                     } else {
                         var errorMessage = 'Registration error';
