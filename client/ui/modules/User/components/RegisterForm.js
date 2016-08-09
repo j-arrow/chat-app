@@ -13,6 +13,10 @@ class RegisterForm extends React.Component {
             password: '',
             repeatPassword: '',
         }
+        this.handleUsernameChange = this.handleUsernameChange.bind(this);
+        this.handlePasswordChange = this.handlePasswordChange.bind(this);
+        this.handleRepeatPasswordChange = this.handleRepeatPasswordChange.bind(this);
+        this.handleUserRegister = this.handleUserRegister.bind(this);
     }
 
     componentDidUpdate() {
@@ -64,22 +68,22 @@ class RegisterForm extends React.Component {
                 <h2>Register form</h2>
 
                 <form
-                    onSubmit={this.handleUserRegister.bind(this)}>
+                    onSubmit={this.handleUserRegister}>
                     <input
                         type='text'
                         placeholder='username'
                         defaultValue={this.state.username}
-                        onChange={this.handleUsernameChange.bind(this)} />
+                        onChange={this.handleUsernameChange} />
                     <input
                         type='password'
                         placeholder='password'
                         defaultValue={this.state.password}
-                        onChange={this.handlePasswordChange.bind(this)} />
+                        onChange={this.handlePasswordChange} />
                     <input
                         type='password'
                         placeholder='repeat password'
                         defaultValue={this.state.repeatPassword}
-                        onChange={this.handleRepeatPasswordChange.bind(this)} />
+                        onChange={this.handleRepeatPasswordChange} />
                     <button
                         type='submit'>
                         Register!

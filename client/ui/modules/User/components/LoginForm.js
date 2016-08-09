@@ -13,6 +13,9 @@ class LoginForm extends React.Component {
             username: '',
             password: '',
         };
+        this.handleUsernameChange = this.handleUsernameChange.bind(this);
+        this.handlePasswordChange = this.handlePasswordChange.bind(this);
+        this.handleUserLogin = this.handleUserLogin.bind(this);
     }
 
     componentDidUpdate() {
@@ -57,17 +60,17 @@ class LoginForm extends React.Component {
 
                 <RaisedButton label="Hey hi hello!" />
                 <form
-                    onSubmit={this.handleUserLogin.bind(this)}>
+                    onSubmit={this.handleUserLogin}>
                     <input
                         type='text'
                         placeholder='username'
                         defaultValue={this.state.username}
-                        onChange={this.handleUsernameChange.bind(this)} />
+                        onChange={this.handleUsernameChange} />
                     <input
                         type='password'
                         placeholder='password'
                         defaultValue={this.state.password}
-                        onChange={this.handlePasswordChange.bind(this)} />
+                        onChange={this.handlePasswordChange} />
                     <button
                         type='submit'>
                         Log in!
