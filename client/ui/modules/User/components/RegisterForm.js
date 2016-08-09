@@ -92,17 +92,24 @@ class RegisterForm extends React.Component {
     };
 };
 
+RegisterForm.propTypes = {
+    loggedIn: React.PropTypes.bool.isRequired,
+    redirectToHome: React.PropTypes.func.isRequired,
+    redirectToLogin: React.PropTypes.func.isRequired,
+    handleRegister: React.PropTypes.func.isRequired,
+};
+
 let RegisterFormContainer = ({
     loggedIn,
     redirectToHome,
     redirectToLogin,
-    dispatchRegister,
+    handleRegister,
 }) => (
     <RegisterForm
         loggedIn={loggedIn}
         redirectToHome={redirectToHome}
         redirectToLogin={redirectToLogin}
-        handleRegister={dispatchRegister} />
+        handleRegister={handleRegister} />
 );
 
 const mapStateToProps = (state, ownProps) => ({
@@ -116,7 +123,7 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    dispatchRegister: (registrationData) => {
+    handleRegister: (registrationData) => {
         dispatch(register(registrationData));
     },
 });

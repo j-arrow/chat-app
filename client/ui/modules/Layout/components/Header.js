@@ -15,6 +15,11 @@ let Header = ({
     </div>
 );
 
+Header.propTypes = {
+    username: React.PropTypes.string,
+    handleLogOut: React.PropTypes.func.isRequired,
+};
+
 const mapDispatchToProps = (dispatch) => ({
     handleLogOut: () => {
         dispatch(logOut());

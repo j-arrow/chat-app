@@ -14,4 +14,8 @@ const AppMaterialUIProvider = ({
     </MuiThemeProvider>
 );
 
+AppMaterialUIProvider.propTypes = {
+    children: React.PropTypes.node.isRequired,
+};
+
 export default AppMaterialUIProvider;

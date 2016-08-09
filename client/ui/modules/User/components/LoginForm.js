@@ -80,15 +80,21 @@ class LoginForm extends React.Component {
     };
 };
 
+LoginForm.propTypes = {
+    loggedIn: React.PropTypes.bool.isRequired,
+    redirectToHome: React.PropTypes.func.isRequired,
+    handleLogIn: React.PropTypes.func.isRequired,
+};
+
 let LoginFormContainer = ({
     loggedIn,
     redirectToHome,
-    dispatchLogIn,
+    handleLogIn,
 }) => (
     <LoginForm
         loggedIn={loggedIn}
         redirectToHome={redirectToHome}
-        handleLogIn={dispatchLogIn} />
+        handleLogIn={handleLogIn} />
 )
 
 const mapStateToProps = (state, ownProps) => ({
@@ -99,7 +105,7 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    dispatchLogIn: (username) => {
+    handleLogIn: (username) => {
         dispatch(logIn(username));
     },
 });

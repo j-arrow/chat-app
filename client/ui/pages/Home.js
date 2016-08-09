@@ -23,6 +23,12 @@ class HomePage extends React.Component {
     }
 }
 
+HomePage.propTypes = {
+    loggedIn: React.PropTypes.bool.isRequired,
+    username: React.PropTypes.string,
+    redirectToLogin: React.PropTypes.func.isRequired,
+};
+
 let HomePageContainer = ({
     loggedIn,
     username,
