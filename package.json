@@ -6,6 +6,7 @@
   "scripts": {
     "bundle": "./node_modules/.bin/webpack --config ./webpack.production.config.js --watch",
     "start": "node index-production.js",
+    "css": "node-sass --include-path scss ./client/main/main.scss ./dist/main.css --watch",
     "dev": "node index-dev.js"
   },
   "author": "Rafal Ochyra (https://github.com/j-arrow)",
@@ -25,18 +26,25 @@
     "hot"
   ],
   "dependencies": {
+    "css-loader": "^0.23.1",
     "express": "^4.14.0",
+    "extract-text-webpack-plugin": "^1.0.1",
     "material-ui": "^0.15.3",
-    "react": "^15.2.1",
+    "node-sass": "^3.8.0",
     "react-dom": "^15.2.1",
     "react-redux": "^4.4.5",
+    "react-resizable": "^1.4.2",
     "react-router": "^2.6.0",
     "react-tap-event-plugin": "^1.0.0",
     "redux": "^3.5.2",
+    "redux-form": "^6.0.0-rc.4",
+    "redux-form-material-ui": "^4.0.1",
     "redux-storage": "^4.1.0",
     "redux-storage-engine-localstorage": "^1.1.1",
     "rethinkdb": "^2.3.2",
-    "socket.io": "^1.4.8"
+    "sass-loader": "^4.0.0",
+    "socket.io": "^1.4.8",
+    "style-loader": "^0.13.1"
   },
   "devDependencies": {
     "babel-core": "^6.11.4",
@@ -52,5 +60,8 @@
     "redux-logger": "^2.6.1",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1"
+  },
+  "peerDependencies": {
+    "react": "^15.2.1"
   }
 }

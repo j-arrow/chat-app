@@ -6,7 +6,7 @@ module.exports = {
   entry: [
       'webpack-dev-server/client?http://localhost:9001', // WebpackDevServer host and port
       'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
-      path.join(__dirname, './client/main/main.js')
+      path.join(__dirname, './client/main/main'),
   ],
   output: {
     path: path.join(__dirname, 'dist'),

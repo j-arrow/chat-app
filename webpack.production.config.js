@@ -1,10 +1,11 @@
 var path = require('path');
 var webpack = require('webpack');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     devtool: 'eval',
     entry: [
-        path.join(__dirname, './client/main/main.js')
+        path.join(__dirname, './client/main/main')
     ],
     output: {
       path: path.join(__dirname, 'dist'),
@@ -12,16 +13,32 @@ module.exports = {
       publicPath: '/static/'
     },
     module: {
-        loaders: [{
-            test: /.js?$/,
-            loader: 'babel-loader',
-            exclude: /node_modules/,
-            include: [
-                path.join(__dirname, '/client/'),
-                path.join(__dirname, '/shared/')
-            ]
-        }]
+        loaders: [
+            {
+                test: /\.scss$/,
+                loader: ExtractTextPlugin.extract(
+                    'style', // The backup style loader
+                    'css?sourceMap!sass?sourceMap'
+                )
+            }, {
+                test: /.js?$/,
+                loader: 'babel-loader',
+                exclude: /node_modules/,
+                include: [
+                    path.join(__dirname, '/client/'),
+                    path.join(__dirname, '/shared/')
+                ]
+            }
+        ]
     },
+    sassLoader: {
+        includePaths: [
+            'client/ui/modules'
+        ]
+    },
+    plugins: [
+        new ExtractTextPlugin("[name].css"),
+    ],
     resolve: {
       alias: {
         $shared: path.resolve('./shared'),
