@@ -2,9 +2,8 @@ import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router';
-import { logIn } from '../reducers/auth.js';
-
-import * as emitters from '../emitters/auth.js';
+import * as inActions from '../reducers/auth.js';
+import * as outActions from '$shared/User/auth-out.js';
 
 class LoginForm extends React.Component {
     constructor(props) {
@@ -16,9 +15,22 @@ class LoginForm extends React.Component {
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleUserLogin = this.handleUserLogin.bind(this);
+
+        this.prepareSocket();
     }
 
-    componentDidUpdate() {
+    prepareSocket() {
+        this.socket = io.connect(outActions.SOCKET_NAMESPACE);
+        this.socket.on(inActions.LOG_IN_SUCCESS, username => {
+            this.props.handleLogIn(username);
+            this.props.redirectToHome();
+        });
+        this.socket.on(inActions.LOG_IN_ERROR, errorMessage => {
+            console.log(errorMessage);
+        });
+    }
+
+    componentDidMount() {
         if (this.props.loggedIn) {
             this.props.redirectToHome();
         }
@@ -43,14 +55,9 @@ class LoginForm extends React.Component {
     handleUserLogin(e) {
         e.preventDefault();
 
-        let logIn = (username) => {
-            this.props.handleLogIn(username);
-            this.props.redirectToHome();
-        };
-
-        emitters.logIn({
+        this.socket.emit(outActions.LOG_IN, {
             ...this.state,
-        }, logIn);
+        });
     }
 
     render() {
@@ -109,7 +116,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     handleLogIn: (username) => {
-        dispatch(logIn(username));
+        dispatch(inActions.logIn(username));
     },
 });
 

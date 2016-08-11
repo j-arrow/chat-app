@@ -12,8 +12,7 @@ var r = require('rethinkdb');
 // Webpack config
 var webpackConfig = require('../../webpack.production.config.js');
 
-var handleSocket = require('../socket/handler.js');
-var authSocketHandler = require('../modules/User/authSocketHandler.js');
+var authNamespaceHandler = require('../modules/User/authNamespaceHandler.js');
 
 app.use(
     webpackConfig.output.publicPath,
@@ -32,13 +31,9 @@ r.connect({
     port: config.database.port,
     db: config.database.db
 }).then(function(connection) {
-    io.on('connection', function (socket) {
 
-        handleSocket([
-            authSocketHandler
-        ])(socket, r, connection);
+    authNamespaceHandler(io, connection, r);
 
-    });
     server.listen(config.server.port,
         () => console.log('Server listening on port: ' + config.server.port)
     );

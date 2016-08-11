@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router';
-import { register } from '../reducers/auth.js';
-
-import * as emitters from '../emitters/auth.js';
+import * as inActions from '../reducers/auth.js';
+import * as outActions from '$shared/User/auth-out.js';
 
 class RegisterForm extends React.Component {
     constructor(props) {
@@ -17,6 +16,19 @@ class RegisterForm extends React.Component {
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleRepeatPasswordChange = this.handleRepeatPasswordChange.bind(this);
         this.handleUserRegister = this.handleUserRegister.bind(this);
+
+        this.prepareSocket();
+    }
+
+    prepareSocket() {
+        this.socket = io.connect(outActions.SOCKET_NAMESPACE);
+        this.socket.on(inActions.REGISTER_SUCCESS, registrationData => {
+            this.props.handleRegister(registrationData);
+            this.props.redirectToLogin();
+        });
+        this.socket.on(inActions.REGISTER_ERROR, errorMessage => {
+            console.log(errorMessage);
+        });
     }
 
     componentDidUpdate() {
@@ -52,14 +64,9 @@ class RegisterForm extends React.Component {
     handleUserRegister(e) {
         e.preventDefault();
 
-        let register = (registrationData) => {
-            this.props.handleRegister(registrationData);
-            this.props.redirectToLogin();
-        };
-
-        emitters.register({
+        this.socket.emit(outActions.REGISTER, {
             ...this.state,
-        }, register)
+        });
     }
 
     render() {
@@ -128,7 +135,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     handleRegister: (registrationData) => {
-        dispatch(register(registrationData));
+        dispatch(inActions.register(registrationData));
     },
 });
 
