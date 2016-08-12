@@ -1,33 +1,45 @@
 import React from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
+import {
+    Paper,
+    Divider,
+    RaisedButton } from 'material-ui';
+import {
+    ActionInput
+    } from 'material-ui/svg-icons';
+import Formsy from 'formsy-react';
+import { FormsyText } from 'formsy-material-ui/lib';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router';
 import * as inActions from '../reducers/auth.js';
 import * as outActions from '$shared/User/auth-out.js';
 
+const styles = {
+    paper: {
+        width: 400,
+        margin: 'auto',
+        padding: 20,
+    },
+    error: {
+        color: 'red',
+    },
+    field: {
+        width: '100%',
+    },
+    loginButton: {
+        marginTop: 30,
+        width: '100%',
+    },
+};
+
 class LoginForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
-            password: '',
+            formValidationError: '',
         };
-        this.handleUsernameChange = this.handleUsernameChange.bind(this);
-        this.handlePasswordChange = this.handlePasswordChange.bind(this);
-        this.handleUserLogin = this.handleUserLogin.bind(this);
 
+        this.submitForm = this.submitForm.bind(this);
         this.prepareSocket();
-    }
-
-    prepareSocket() {
-        this.socket = io.connect(outActions.SOCKET_NAMESPACE);
-        this.socket.on(inActions.LOG_IN_SUCCESS, username => {
-            this.props.handleLogIn(username);
-            this.props.redirectToHome();
-        });
-        this.socket.on(inActions.LOG_IN_ERROR, errorMessage => {
-            console.log(errorMessage);
-        });
     }
 
     componentDidMount() {
@@ -36,56 +48,65 @@ class LoginForm extends React.Component {
         }
     }
 
-    handleUsernameChange(e) {
-        e.preventDefault();
-        // TODO client-side validation
-        this.setState({
-            username: e.target.value,
+    prepareSocket() {
+        this.socket = io.connect(outActions.SOCKET_NAMESPACE);
+        this.socket.on(inActions.LOG_IN_SUCCESS, username => {
+            this.setState({
+                formValidationError: '',
+            });
+            this.props.handleLogIn(username);
+            this.props.redirectToHome();
+        });
+        this.socket.on(inActions.LOG_IN_ERROR, errorMessage => {
+            this.setState({
+                formValidationError: errorMessage,
+            });
         });
     }
 
-    handlePasswordChange(e) {
-        e.preventDefault();
-        // TODO client-side validation
-        this.setState({
-            password: e.target.value
-        });
-    }
-
-    handleUserLogin(e) {
-        e.preventDefault();
-
-        this.socket.emit(outActions.LOG_IN, {
-            ...this.state,
-        });
+    submitForm(data) {
+        this.socket.emit(outActions.LOG_IN, data);
     }
 
     render() {
         return (
-            <div>
+            <Paper style={styles.paper}>
                 <h2>Login form</h2>
-
-                <RaisedButton label="Hey hi hello!" />
-                <form
-                    onSubmit={this.handleUserLogin}>
-                    <input
-                        type='text'
-                        placeholder='username'
-                        defaultValue={this.state.username}
-                        onChange={this.handleUsernameChange} />
-                    <input
+                <Divider />
+                <Formsy.Form
+                    onValidSubmit={this.submitForm}>
+                    <FormsyText
+                        name='username'
+                        hintText='Please enter your username'
+                        floatingLabelText='Username'
+                        required
+                        style={styles.field} />
+                    <FormsyText
+                        name='password'
                         type='password'
-                        placeholder='password'
-                        defaultValue={this.state.password}
-                        onChange={this.handlePasswordChange} />
-                    <button
-                        type='submit'>
-                        Log in!
-                    </button>
-                </form>
-
+                        hintText='Please enter your password'
+                        floatingLabelText='Password'
+                        required
+                        style={styles.field} />
+                    <div>
+                    <p
+                        style={styles.error}>
+                        {this.state.formValidationError}
+                    </p>
+                    <RaisedButton
+                        label='Login'
+                        labelPosition='after'
+                        type='submit'
+                        primary={true}
+                        style={styles.loginButton}
+                        icon={
+                            <ActionInput />
+                        } />
+                    </div>
+                </Formsy.Form>
+                <Divider />
                 <Link to='/register'>Register!</Link>
-            </div>
+            </Paper>
         );
     };
 };
@@ -105,7 +126,7 @@ let LoginFormContainer = ({
         loggedIn={loggedIn}
         redirectToHome={redirectToHome}
         handleLogIn={handleLogIn} />
-)
+);
 
 const mapStateToProps = (state, ownProps) => ({
     loggedIn: state.auth.loggedIn,
@@ -117,7 +138,7 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = (dispatch) => ({
     handleLogIn: (username) => {
         dispatch(inActions.logIn(username));
-    },
+    }
 });
 
 LoginFormContainer = withRouter(
