@@ -1,106 +1,124 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import {
+    Paper,
+    Divider,
+    RaisedButton } from 'material-ui';
+import {
+    CommunicationVpnKey
+    } from 'material-ui/svg-icons';
+import Formsy from 'formsy-react';
+import {
+    FormsyText } from 'formsy-material-ui/lib';
 import { withRouter, Link } from 'react-router';
+import { connect } from 'react-redux';
 import * as inActions from '../reducers/auth.js';
 import * as outActions from '$shared/User/auth-out.js';
+
+const styles = {
+    paper: {
+        width: 400,
+        margin: 'auto',
+        padding: 20,
+    },
+    error: {
+        color: 'red',
+    },
+    field: {
+        width: '100%',
+    },
+    registerButton: {
+        marginTop: 30,
+        width: '100%',
+    },
+};
 
 class RegisterForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
-            password: '',
-            repeatPassword: '',
-        }
-        this.handleUsernameChange = this.handleUsernameChange.bind(this);
-        this.handlePasswordChange = this.handlePasswordChange.bind(this);
-        this.handleRepeatPasswordChange = this.handleRepeatPasswordChange.bind(this);
-        this.handleUserRegister = this.handleUserRegister.bind(this);
+            formValidationError: '',
+        };
 
+        this.submitForm = this.submitForm.bind(this);
+        this.prepareSocket = this.prepareSocket.bind(this);
         this.prepareSocket();
     }
 
-    prepareSocket() {
-        this.socket = io.connect(outActions.SOCKET_NAMESPACE);
-        this.socket.on(inActions.REGISTER_SUCCESS, registrationData => {
-            this.props.handleRegister(registrationData);
-            this.props.redirectToLogin();
-        });
-        this.socket.on(inActions.REGISTER_ERROR, errorMessage => {
-            console.log(errorMessage);
-        });
-    }
-
-    componentDidUpdate() {
+    componentDidMount() {
         if (this.props.loggedIn) {
             this.props.redirectToHome();
         }
     }
 
-    handleUsernameChange(e) {
-        e.preventDefault();
-        // TODO client-side validation
-        this.setState({
-            username: e.target.value,
+    prepareSocket() {
+        this.socket = io.connect(outActions.SOCKET_NAMESPACE);
+        this.socket.on(inActions.REGISTER_SUCCESS, registrationData => {
+            this.setState({
+                formValidationError: '',
+            });
+            this.props.handleRegister(registrationData);
+            this.props.redirectToLogin();
+        });
+        this.socket.on(inActions.REGISTER_ERROR, errorMessage => {
+            this.setState({
+                formValidationError: errorMessage,
+            });
         });
     }
 
-    handlePasswordChange(e) {
-        e.preventDefault();
-        // TODO client-side validation
-        this.setState({
-            password: e.target.value,
-        });
-    }
-
-    handleRepeatPasswordChange(e) {
-        e.preventDefault();
-        // TODO client-side validation
-        this.setState({
-            repeatPassword: e.target.value,
-        });
-    }
-
-    handleUserRegister(e) {
-        e.preventDefault();
-
-        this.socket.emit(outActions.REGISTER, {
-            ...this.state,
-        });
+    submitForm(data) {
+        this.socket.emit(outActions.REGISTER, data);
     }
 
     render() {
         return (
-            <div>
+            <Paper
+                style={styles.paper}>
                 <h2>Register form</h2>
-
-                <form
-                    onSubmit={this.handleUserRegister}>
-                    <input
-                        type='text'
-                        placeholder='username'
-                        defaultValue={this.state.username}
-                        onChange={this.handleUsernameChange} />
-                    <input
+                <Divider />
+                <Formsy.Form
+                    onValidSubmit={this.submitForm}>
+                    <FormsyText
+                        name='username'
+                        hintText='Please enter your username'
+                        floatingLabelText='Username'
+                        required
+                        style={styles.field} />
+                    <FormsyText
+                        name='password'
                         type='password'
-                        placeholder='password'
-                        defaultValue={this.state.password}
-                        onChange={this.handlePasswordChange} />
-                    <input
+                        hintText='Please enter your password'
+                        floatingLabelText='Password'
+                        required
+                        style={styles.field} />
+                    <FormsyText
+                        name='repeatPassword'
                         type='password'
-                        placeholder='repeat password'
-                        defaultValue={this.state.repeatPassword}
-                        onChange={this.handleRepeatPasswordChange} />
-                    <button
-                        type='submit'>
-                        Register!
-                    </button>
-                </form>
-
-                <Link to='/login'>Log in!</Link>
-            </div>
+                        hintText='Please repeat your password'
+                        floatingLabelText='Repeat password'
+                        required
+                        style={styles.field} />
+                    <div>
+                        <p
+                            style={styles.error}>
+                            {this.state.formValidationError}
+                        </p>
+                        <RaisedButton
+                            label='Register'
+                            labelPosition='after'
+                            type='submit'
+                            primary={true}
+                            style={styles.registerButton}
+                            icon={
+                                <CommunicationVpnKey />
+                            } />
+                    </div>
+                </Formsy.Form>
+                <hr />
+                Already have an account? <Link to='/login'>Log in!</Link>
+            </Paper>
         );
-    };
+    }
 };
 
 RegisterForm.propTypes = {
@@ -130,8 +148,8 @@ const mapStateToProps = (state, ownProps) => ({
     },
     redirectToLogin: () => {
         ownProps.router.push('/login');
-    }
-});
+    },
+ });
 
 const mapDispatchToProps = (dispatch) => ({
     handleRegister: (registrationData) => {

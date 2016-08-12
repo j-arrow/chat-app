@@ -52,7 +52,7 @@ module.exports = function(socket, rethinkDB, connection) {
                             socket.emit(ENTITY_NAME + REGISTER_ERROR_SUFFIX, errorMessage);
                         }
                     } else {
-                        var errorMessage = 'Registration error';
+                        var errorMessage = 'Username already taken, please use different';
                         socket.emit(ENTITY_NAME + REGISTER_ERROR_SUFFIX, errorMessage);
                     }
 
@@ -84,7 +84,7 @@ module.exports = function(socket, rethinkDB, connection) {
                             err.name === 'ReqlDriverError' &&
                             err.message === 'No more rows in the cursor.'
                         )) {
-                            var errorMessage = 'User not found';
+                            var errorMessage = 'User not found: please, check your credentials';
                             socket.emit(ENTITY_NAME + LOG_IN_ERROR_SUFFIX, errorMessage);
                             return;
                         } else {

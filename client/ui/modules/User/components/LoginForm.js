@@ -39,6 +39,7 @@ class LoginForm extends React.Component {
         };
 
         this.submitForm = this.submitForm.bind(this);
+        this.prepareSocket = this.prepareSocket.bind(this);
         this.prepareSocket();
     }
 
@@ -70,7 +71,8 @@ class LoginForm extends React.Component {
 
     render() {
         return (
-            <Paper style={styles.paper}>
+            <Paper
+                style={styles.paper}>
                 <h2>Login form</h2>
                 <Divider />
                 <Formsy.Form
@@ -89,23 +91,23 @@ class LoginForm extends React.Component {
                         required
                         style={styles.field} />
                     <div>
-                    <p
-                        style={styles.error}>
-                        {this.state.formValidationError}
-                    </p>
-                    <RaisedButton
-                        label='Login'
-                        labelPosition='after'
-                        type='submit'
-                        primary={true}
-                        style={styles.loginButton}
-                        icon={
-                            <ActionInput />
-                        } />
+                        <p
+                            style={styles.error}>
+                            {this.state.formValidationError}
+                        </p>
+                        <RaisedButton
+                            label='Login'
+                            labelPosition='after'
+                            type='submit'
+                            primary={true}
+                            style={styles.loginButton}
+                            icon={
+                                <ActionInput />
+                            } />
                     </div>
                 </Formsy.Form>
-                <Divider />
-                <Link to='/register'>Register!</Link>
+                <hr />
+                You don't have an account? <Link to='/register'>Register!</Link>
             </Paper>
         );
     };
