@@ -17,7 +17,7 @@ const styles = {
     paper: {
         width: 400,
         margin: 'auto',
-        padding: 20,
+        padding: 30,
     },
     error: {
         color: 'red',

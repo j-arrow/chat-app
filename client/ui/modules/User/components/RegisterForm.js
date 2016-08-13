@@ -18,7 +18,7 @@ const styles = {
     paper: {
         width: 400,
         margin: 'auto',
-        padding: 20,
+        padding: 30,
     },
     error: {
         color: 'red',
@@ -30,7 +30,21 @@ const styles = {
         marginTop: 30,
         width: '100%',
     },
+    passwordInfo: {
+        fontSize: '0.8em',
+    },
 };
+
+Formsy.addValidationRule('isPassword', (values, value) => {
+    // Password must be 6-15 characters - {6,15} Must have no spaces,
+    // at least 1 digit (?=.*[\d]), at least 1 uppercase letter
+    // (?=.*[A-Z]) and at least one lowercase letter (?=.*[a-z]).
+    // Allows specifying special characters - !@#$%_
+    return /^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])[\w\d!@#$%_]{6,15}$/.test(value);
+});
+Formsy.addValidationRule('matchMainPassword', (values, value) => {
+    return value === values.password;
+});
 
 class RegisterForm extends React.Component {
     constructor(props) {
@@ -82,6 +96,11 @@ class RegisterForm extends React.Component {
                         name='username'
                         hintText='Please enter your username'
                         floatingLabelText='Username'
+                        validations={{
+                            minLength:3,
+                            maxLength: 15
+                        }}
+                        validationError='Username must be 3-15 characters long'
                         required
                         style={styles.field} />
                     <FormsyText
@@ -89,6 +108,8 @@ class RegisterForm extends React.Component {
                         type='password'
                         hintText='Please enter your password'
                         floatingLabelText='Password'
+                        validations='isPassword'
+                        validationError='Password requirements not met'
                         required
                         style={styles.field} />
                     <FormsyText
@@ -96,6 +117,8 @@ class RegisterForm extends React.Component {
                         type='password'
                         hintText='Please repeat your password'
                         floatingLabelText='Repeat password'
+                        validations='matchMainPassword'
+                        validationError='Both passwords must match'
                         required
                         style={styles.field} />
                     <div>
@@ -103,6 +126,17 @@ class RegisterForm extends React.Component {
                             style={styles.error}>
                             {this.state.formValidationError}
                         </p>
+                        <span
+                            style={styles.passwordInfo}>
+                            Password:
+                            <ul>
+                                <li><strong>must</strong> be 6-15 characters long,</li>
+                                <li><strong>must</strong> have no spaces,</li>
+                                <li><strong>must</strong> have at least 1 digit,</li>
+                                <li><strong>must</strong> have at least 1 uppercase and lowercase letter,</li>
+                                <li>can contain <em>!@#$%_</em> characters</li>
+                            </ul>
+                        </span>
                         <RaisedButton
                             label='Register'
                             labelPosition='after'
@@ -149,7 +183,7 @@ const mapStateToProps = (state, ownProps) => ({
     redirectToLogin: () => {
         ownProps.router.push('/login');
     },
- });
+});
 
 const mapDispatchToProps = (dispatch) => ({
     handleRegister: (registrationData) => {
