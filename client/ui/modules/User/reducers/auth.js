@@ -1,6 +1,7 @@
 var defaultState = {
     loggedIn: false,
-    username: null,
+    username: undefined,
+    sessionId: undefined,
 };
 
 export const REGISTER = 'auth:REGISTER';
@@ -10,6 +11,7 @@ export const LOG_IN = 'auth:LOG_IN';
 export const LOG_IN_SUCCESS = 'auth:LOG_IN_SUCCESS';
 export const LOG_IN_ERROR = 'auth:LOG_IN_ERROR';
 export const LOG_OUT = 'auth:LOG_OUT';
+export const LOG_OUT_SUCCESS = 'auth:LOG_OUT_SUCCESS';
 
 export const register = (registrationData) => ({
     type: REGISTER,
@@ -18,9 +20,10 @@ export const register = (registrationData) => ({
     repeatPassword: registrationData.repeatPassword,
 });
 
-export const logIn = (username) => ({
+export const logIn = (data) => ({
     type: LOG_IN,
-    username,
+    username: data.username,
+    sessionId: data.sessionId,
 });
 
 export const logOut = () => ({
@@ -33,6 +36,7 @@ const auth = (state = defaultState, action) => {
             return {
                 loggedIn: true,
                 username: action.username,
+                sessionId: action.sessionId,
             };
         case LOG_OUT:
             return defaultState;

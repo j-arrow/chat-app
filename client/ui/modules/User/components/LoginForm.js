@@ -48,11 +48,11 @@ class LoginForm extends React.Component {
 
     prepareSocket() {
         this.socket = io.connect(outActions.SOCKET_NAMESPACE);
-        this.socket.on(inActions.LOG_IN_SUCCESS, username => {
+        this.socket.on(inActions.LOG_IN_SUCCESS, data => {
             this.setState({
                 formValidationError: '',
             });
-            this.props.handleLogIn(username);
+            this.props.handleLogIn(data);
             NotificationManager.success(
                 'You logged in!',
                 'Login successful',
