@@ -9,10 +9,10 @@ const App = ({
     children,
 }) => (
     <div>
-        <NotificationContainer />
         <Provider store={store}>
             {children}
         </Provider>
+        <NotificationContainer />
     </div>
 );
 

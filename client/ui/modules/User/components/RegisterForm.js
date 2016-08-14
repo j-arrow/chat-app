@@ -23,12 +23,8 @@ const styles = {
     error: {
         color: 'red',
     },
-    field: {
-        width: '100%',
-    },
     registerButton: {
         marginTop: 30,
-        width: '100%',
     },
     passwordInfo: {
         fontSize: '0.8em',
@@ -107,7 +103,7 @@ class RegisterForm extends React.Component {
                         }}
                         validationError='Username must be 3-15 characters long'
                         required
-                        style={styles.field} />
+                        fullWidth={true} />
                     <FormsyText
                         name='password'
                         type='password'
@@ -116,7 +112,7 @@ class RegisterForm extends React.Component {
                         validations='isPassword'
                         validationError='Password requirements not met'
                         required
-                        style={styles.field} />
+                        fullWidth={true} />
                     <FormsyText
                         name='repeatPassword'
                         type='password'
@@ -125,7 +121,7 @@ class RegisterForm extends React.Component {
                         validations='matchMainPassword'
                         validationError='Both passwords must match'
                         required
-                        style={styles.field} />
+                        fullWidth={true} />
                     <div>
                         <p
                             style={styles.error}>
@@ -147,6 +143,7 @@ class RegisterForm extends React.Component {
                             labelPosition='after'
                             type='submit'
                             primary={true}
+                            fullWidth={true}
                             style={styles.registerButton}
                             icon={
                                 <CommunicationVpnKey />

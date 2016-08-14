@@ -1,9 +1,7 @@
-@import "node_modules/react-notifications/lib/notifications";
+@import 'node_modules/react-notifications/lib/notifications';
 
 body {
     font-family: 'Roboto';
-    background-color: rgba(0,0,0,.35); // Tint color
-    background-blend-mode: multiply;
-    background-image: url('http://www.camposanto.com/external/wallpapers/Launch_Green/FWG_2560x1440.jpg');
-    font-size: 100%;
+    background: black;
+    margin: 0;
 }

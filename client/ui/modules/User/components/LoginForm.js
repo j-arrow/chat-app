@@ -23,12 +23,8 @@ const styles = {
     error: {
         color: 'red',
     },
-    field: {
-        width: '100%',
-    },
     loginButton: {
         marginTop: 30,
-        width: '100%',
     },
 };
 
@@ -88,14 +84,14 @@ class LoginForm extends React.Component {
                         hintText='Please enter your username'
                         floatingLabelText='Username'
                         required
-                        style={styles.field} />
+                        fullWidth={true} />
                     <FormsyText
                         name='password'
                         type='password'
                         hintText='Please enter your password'
                         floatingLabelText='Password'
                         required
-                        style={styles.field} />
+                        fullWidth={true} />
                     <div>
                         <p
                             style={styles.error}>
@@ -107,6 +103,7 @@ class LoginForm extends React.Component {
                             type='submit'
                             primary={true}
                             style={styles.loginButton}
+                            fullWidth={true}
                             icon={
                                 <ActionInput />
                             } />
