@@ -35,7 +35,10 @@ r.connect({
     authNamespaceHandler(io, connection, r);
 
     server.listen(config.server.port,
-        () => console.log('Server listening on port: ' + config.server.port)
+        () => {
+            console.log('process.env.NODE_ENV: ' + process.env.NODE_ENV);
+            console.log('Server listening on port: ' + config.server.port);
+        }
     );
 }).error(function(error) {
     console.log('Error connecting to RethinkDB!');

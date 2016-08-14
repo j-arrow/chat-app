@@ -15,5 +15,6 @@ new WebpackDevServer(webpack(config), {
         return console.log(err);
     }
 
+    console.log('process.env.NODE_ENV: ' + process.env.NODE_ENV);
     console.log('Listening at http://localhost:9001/');
 });
