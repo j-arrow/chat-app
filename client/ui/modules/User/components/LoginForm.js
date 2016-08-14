@@ -8,6 +8,7 @@ import {
     } from 'material-ui/svg-icons';
 import Formsy from 'formsy-react';
 import { FormsyText } from 'formsy-material-ui/lib';
+import { NotificationManager } from 'react-notifications';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router';
 import * as inActions from '../reducers/auth.js';
@@ -56,6 +57,11 @@ class LoginForm extends React.Component {
                 formValidationError: '',
             });
             this.props.handleLogIn(username);
+            NotificationManager.success(
+                'You logged in!',
+                'Login successful',
+                3000
+            );
             this.props.redirectToHome();
         });
         this.socket.on(inActions.LOG_IN_ERROR, errorMessage => {

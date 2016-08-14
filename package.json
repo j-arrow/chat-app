@@ -6,7 +6,7 @@
   "scripts": {
     "bundle": "./node_modules/.bin/webpack --config ./webpack.production.config.js --watch",
     "start": "node index-production.js",
-    "css": "node-sass --include-path scss ./client/main/main.scss ./dist/main.css --watch",
+    "css": "node-sass ./client/main/main.scss ./dist/main.css --watch",
     "dev": "node index-dev.js"
   },
   "author": "Rafal Ochyra (https://github.com/j-arrow)",
@@ -34,7 +34,9 @@
     "material-ui": "^0.15.3",
     "node-sass": "^3.8.0",
     "react": "^15.2.1",
+    "react-addons-css-transition-group": "^15.3.0",
     "react-dom": "^15.2.1",
+    "react-notifications": "^1.2.0",
     "react-redux": "^4.4.5",
     "react-resizable": "^1.4.2",
     "react-router": "^2.6.0",

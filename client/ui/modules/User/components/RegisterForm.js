@@ -7,8 +7,8 @@ import {
     CommunicationVpnKey
     } from 'material-ui/svg-icons';
 import Formsy from 'formsy-react';
-import {
-    FormsyText } from 'formsy-material-ui/lib';
+import { FormsyText } from 'formsy-material-ui/lib';
+import { NotificationManager } from 'react-notifications';
 import { withRouter, Link } from 'react-router';
 import { connect } from 'react-redux';
 import * as inActions from '../reducers/auth.js';
@@ -71,6 +71,11 @@ class RegisterForm extends React.Component {
                 formValidationError: '',
             });
             this.props.handleRegister(registrationData);
+            NotificationManager.success(
+                'You registered successfully, please log in!',
+                'Registration successful',
+                3000
+            );
             this.props.redirectToLogin();
         });
         this.socket.on(inActions.REGISTER_ERROR, errorMessage => {
