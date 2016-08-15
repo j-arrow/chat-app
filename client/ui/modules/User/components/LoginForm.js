@@ -19,6 +19,7 @@ const styles = {
         width: 400,
         margin: 'auto',
         padding: 30,
+        textAlign: 'center',
     },
     error: {
         color: 'red',

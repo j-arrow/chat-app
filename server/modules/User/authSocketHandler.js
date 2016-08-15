@@ -53,6 +53,7 @@ var createUser = function(rethinkDB, connection, data, onSuccess) {
         });
 }
 
+var endUserSession = function(rethinkDB, connection, sessionId, onSuccess) {
     rethinkDB.table(SESSION_TABLE_NAME)
         .get(sessionId)
         .update({
@@ -147,6 +148,7 @@ module.exports = function(socket, rethinkDB, connection) {
         logSocketAction(clientActions.LOG_OUT);
 
         try {
+            endUserSession(rethinkDB, connection, sessionId, () => {
                 socket.emit(ENTITY_NAME + LOG_OUT_SUCCESS_SUFFIX, {});
             });
         } catch (err) {

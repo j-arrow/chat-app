@@ -16,18 +16,18 @@ import * as outActions from '$shared/User/auth-out.js';
 
 const styles = {
     paper: {
-        width: 400,
+        width: 700,
         margin: 'auto',
         padding: 30,
+    },
+    form: {
+        textAlign: 'center',
     },
     error: {
         color: 'red',
     },
     registerButton: {
         marginTop: 30,
-    },
-    passwordInfo: {
-        fontSize: '0.8em',
     },
 };
 
@@ -89,69 +89,80 @@ class RegisterForm extends React.Component {
         return (
             <Paper
                 style={styles.paper}>
-                <h2>Register form</h2>
-                <Divider />
-                <Formsy.Form
-                    onValidSubmit={this.submitForm}>
-                    <FormsyText
-                        name='username'
-                        hintText='Please enter your username'
-                        floatingLabelText='Username'
-                        validations={{
-                            minLength:3,
-                            maxLength: 15
-                        }}
-                        validationError='Username must be 3-15 characters long'
-                        required
-                        fullWidth={true} />
-                    <FormsyText
-                        name='password'
-                        type='password'
-                        hintText='Please enter your password'
-                        floatingLabelText='Password'
-                        validations='isPassword'
-                        validationError='Password requirements not met'
-                        required
-                        fullWidth={true} />
-                    <FormsyText
-                        name='repeatPassword'
-                        type='password'
-                        hintText='Please repeat your password'
-                        floatingLabelText='Repeat password'
-                        validations='matchMainPassword'
-                        validationError='Both passwords must match'
-                        required
-                        fullWidth={true} />
-                    <div>
-                        <p
-                            style={styles.error}>
-                            {this.state.formValidationError}
-                        </p>
-                        <span
-                            style={styles.passwordInfo}>
-                            Password:
-                            <ul>
-                                <li><strong>must</strong> be 6-15 characters long,</li>
-                                <li><strong>must</strong> have no spaces,</li>
-                                <li><strong>must</strong> have at least 1 digit,</li>
-                                <li><strong>must</strong> have at least 1 uppercase and lowercase letter,</li>
-                                <li>can contain <em>!@#$%_</em> characters</li>
-                            </ul>
-                        </span>
-                        <RaisedButton
-                            label='Register'
-                            labelPosition='after'
-                            type='submit'
-                            primary={true}
-                            fullWidth={true}
-                            style={styles.registerButton}
-                            icon={
-                                <CommunicationVpnKey />
-                            } />
+                <div className='row'>
+                    <div className='col-xs-7' style={styles.form}>
+                        <h2>Register form</h2>
+                        <Divider />
+                        <Formsy.Form
+                            onValidSubmit={this.submitForm}>
+                            <FormsyText
+                                name='username'
+                                hintText='Please enter your username'
+                                floatingLabelText='Username'
+                                validations={{
+                                    minLength:5,
+                                    maxLength:15
+                                }}
+                                validationError='Username must be 3-15 characters long'
+                                required
+                                fullWidth={true} />
+                            <FormsyText
+                                name='password'
+                                type='password'
+                                hintText='Please enter your password'
+                                floatingLabelText='Password'
+                                validations='isPassword'
+                                validationError='Password requirements not met'
+                                required
+                                fullWidth={true} />
+                            <FormsyText
+                                name='repeatPassword'
+                                type='password'
+                                hintText='Please repeat your password'
+                                floatingLabelText='Repeat password'
+                                validations='matchMainPassword'
+                                validationError='Both passwords must match'
+                                required
+                                fullWidth={true} />
+                            <div>
+                                <p
+                                    style={styles.error}>
+                                    {this.state.formValidationError}
+                                </p>
+                                <RaisedButton
+                                    label='Register'
+                                    labelPosition='after'
+                                    type='submit'
+                                    primary={true}
+                                    fullWidth={true}
+                                    style={styles.registerButton}
+                                    icon={
+                                        <CommunicationVpnKey />
+                                    } />
+                            </div>
+                        </Formsy.Form>
+                        <hr />
+                        Already have an account? <Link to='/login'>Log in!</Link>
                     </div>
-                </Formsy.Form>
-                <hr />
-                Already have an account? <Link to='/login'>Log in!</Link>
+                    <div className='col-xs-5'>
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        Username:
+                        <ul>
+                            <li><strong>must</strong> be 5-15 characters long</li>
+                        </ul>
+                        Password:
+                        <ul>
+                            <li><strong>must</strong> be 6-15 characters long</li>
+                            <li><strong>must</strong> have no spaces</li>
+                            <li><strong>must</strong> have at least 1 digit</li>
+                            <li><strong>must</strong> have at least 1 uppercase and lowercase letter</li>
+                            <li>can contain <em>!@#$%_</em> characters</li>
+                        </ul>
+                    </div>
+                </div>
             </Paper>
         );
     }
