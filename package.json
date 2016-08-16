@@ -6,7 +6,7 @@
   "scripts": {
     "bundle": "set NODE_ENV=production && webpack --config ./webpack.production.config.js --watch",
     "start": "set NODE_ENV=production && node index-production.js",
-    "css": "node-sass ./client/main/main.scss ./dist/main.css --watch",
+    "css": "node-sass  --watch --include-path=client/ui/modules ./client/main/main.scss ./dist/main.css",
     "dev": "set NODE_ENV=development && node index-dev.js"
   },
   "author": "Rafal Ochyra (https://github.com/j-arrow)",

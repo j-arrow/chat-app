@@ -1,6 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import Header from 'Layout/components/Header.js';
+import FriendsPanel from 'Friends/components/FriendsPanel.js';
+import InvitationsDialog from 'Friends/components/InvitationsDialog.js';
+import ChatPanel from 'Chat/components/ChatPanel.js';
 import * as inActions from 'User/reducers/auth.js';
 import * as outActions from '$shared/User/auth-out.js';
 
@@ -8,6 +12,7 @@ class HomePage extends React.Component {
     constructor(props) {
         super(props);
         this.logOut = this.logOut.bind(this);
+        this.showInvitationsDialog = this.showInvitationsDialog.bind(this);
 
         this.prepareSocket = this.prepareSocket.bind(this);
         this.prepareSocket();
@@ -30,14 +35,33 @@ class HomePage extends React.Component {
         this.socket.emit(outActions.LOG_OUT, this.props.sessionId);
     }
 
+    showInvitationsDialog() {
+        this.invitationsDialog.open();
+    }
+
     render() {
         const { username } = this.props;
 
         return (
-            <div>
-                <Header
-                    username={username} />
-                <h1>Home page</h1>
+            <div className='container-fluid'>
+                <div className='row'>
+                    <Header
+                        username={username}
+                        handleLogOut={this.logOut}
+                        showInvitationsDialog={this.showInvitationsDialog} />
+                </div>
+                <div className='row' style={{marginTop:15}}>
+                    <div className='col-xs-3'>
+                        <FriendsPanel
+                            showInvitationsDialog={this.showInvitationsDialog} />
+                    </div>
+                    <div className='col-xs-9'>
+                        <ChatPanel />
+                    </div>
+                </div>
+                <InvitationsDialog ref={
+                        (dialog) => this.invitationsDialog = dialog
+                    } />
             </div>
         );
     }

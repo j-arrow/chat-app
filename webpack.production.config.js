@@ -78,11 +78,6 @@ module.exports = {
             }
         ]
     },
-    sassLoader: {
-        includePaths: [
-            'client/ui/modules'
-        ]
-    },
     plugins: [
         new ExtractTextPlugin("[name].css"),
         new webpack.DefinePlugin({
