@@ -75,7 +75,17 @@ var startUserSession = function(rethinkDB, connection, userId, onSuccess) {
         });
 }
 
-
+var validateCredentials = function(credentials) {
+    var passwordRegexp = /^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])[\w\d!@#$%_]{6,15}$/;
+    var usernameRegexp = /^.{5,15}/;
+    if (!passwordRegexp.test(credentials.password)) {
+        throw 'Password requirements not met';
+    } else if (credentials.password !== credentials.repeatPassword) {
+        throw 'Both passwords must match';
+    } else if (!usernameRegexp.test(credentials.username)) {
+        throw 'Username must be 5-15 characters long';
+    }
+}
 
 
 
@@ -88,10 +98,14 @@ module.exports = function(socket, rethinkDB, connection) {
 
         var registrationData = {
             username: data.username,
-            password: data.password
+            password: data.password,
+            repeatPassword: data.repeatPassword,
         };
 
         try {
+            validateCredentials(registrationData);
+            delete registrationData.repeatPassword;
+
             userExists(rethinkDB, connection, { username: registrationData.username }, () => {
                 createUser(rethinkDB, connection, registrationData, (userId) => {
                     socket.emit(authConstants.SERVER.REGISTER_SUCCESS, {

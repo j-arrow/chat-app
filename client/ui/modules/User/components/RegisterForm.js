@@ -103,7 +103,7 @@ class RegisterForm extends React.Component {
                                     minLength:5,
                                     maxLength:15
                                 }}
-                                validationError='Username must be 3-15 characters long'
+                                validationError='Username must be 5-15 characters long'
                                 required
                                 fullWidth={true} />
                             <FormsyText
