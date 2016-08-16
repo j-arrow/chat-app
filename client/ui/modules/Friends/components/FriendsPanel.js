@@ -6,6 +6,7 @@ import FriendsDialog from 'Friends/components/SearchDialog.js';
 
 const FriendsPanel = ({
     showInvitationsDialog,
+    onFriendClick,
 }) => (
     <Paper>
         <div style={{height:110,display:'flex',alignItems:'center',flexDirection:'column',justifyContent:'center'}}>
@@ -23,7 +24,8 @@ const FriendsPanel = ({
             </div>
         </div>
         <Divider />
-        <FriendsList />
+        <FriendsList
+            onFriendClick={onFriendClick} />
     </Paper>
 );
 

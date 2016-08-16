@@ -7,7 +7,15 @@ const ChatMessageList = () => (
         <ChatMessage type='in' />
         <ChatMessage type='out' />
         <ChatMessage type='in' />
+        <ChatMessage type='in' />
         <ChatMessage type='out' />
+        <ChatMessage type='out' />
+        <ChatMessage type='out' />
+        <ChatMessage type='out' />
+        <ChatMessage type='in' />
+        <ChatMessage type='in' />
+        <ChatMessage type='in' />
+        <ChatMessage type='in' />
     </div>
 );
 

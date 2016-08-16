@@ -13,6 +13,7 @@ class HomePage extends React.Component {
         super(props);
         this.logOut = this.logOut.bind(this);
         this.showInvitationsDialog = this.showInvitationsDialog.bind(this);
+        this.openChatWindow = this.openChatWindow.bind(this);
 
         this.prepareSocket = this.prepareSocket.bind(this);
         this.prepareSocket();
@@ -39,6 +40,10 @@ class HomePage extends React.Component {
         this.invitationsDialog.open();
     }
 
+    openChatWindow(friend) {
+        this.chatPanel.open(friend);
+    }
+
     render() {
         const { username } = this.props;
 
@@ -53,10 +58,13 @@ class HomePage extends React.Component {
                 <div className='row' style={{marginTop:15}}>
                     <div className='col-xs-3'>
                         <FriendsPanel
+                            onFriendClick={this.openChatWindow}
                             showInvitationsDialog={this.showInvitationsDialog} />
                     </div>
                     <div className='col-xs-9'>
-                        <ChatPanel />
+                        <ChatPanel ref={
+                                (chat) => this.chatPanel = chat
+                            } />
                     </div>
                 </div>
                 <InvitationsDialog ref={

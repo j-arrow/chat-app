@@ -142,8 +142,8 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    handleLogIn: (username) => {
-        dispatch(inActions.logIn(username));
+    handleLogIn: (data) => {
+        dispatch(inActions.logIn(data));
     }
 });
 

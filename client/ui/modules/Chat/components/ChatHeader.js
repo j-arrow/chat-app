@@ -2,10 +2,15 @@ import React from 'react';
 import { IconButton } from 'material-ui';
 import CloseIcon from 'material-ui/svg-icons/content/clear';
 
-const ChatHeader = () => (
+const ChatHeader = ({
+    username,
+    closeAction,
+}) => (
     <div className='chat-header'>
-        <p>Michael Lee</p>
-        <IconButton className='close-btn'>
+        <p>{username}</p>
+        <IconButton
+            className='close-btn'
+            onClick={closeAction}>
             <CloseIcon />
         </IconButton>
         <div className='clearboth'></div>

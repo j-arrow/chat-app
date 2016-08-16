@@ -1,26 +1,23 @@
 import React from 'react';
-import { List, ListItem } from 'material-ui/List';
-import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
-import PersonIcon from 'material-ui/svg-icons/social/person';
+import { List } from 'material-ui/List';
+import FriendListItem from './FriendListItem.js';
 
-const FriendsList = () => (
+const FriendsList = ({
+    onFriendClick,
+}) => (
     <List>
-        <ListItem
-            primaryText='Michael Lee'
-            leftIcon={<PersonIcon />}
-            rightIcon={<CommunicationChatBubble />} />
-        <ListItem
-            primaryText='Peter Clemenza'
-            leftIcon={<PersonIcon />}
-            rightIcon={<CommunicationChatBubble />} />
-        <ListItem
-            primaryText='Tommy Hangen'
-            leftIcon={<PersonIcon />}
-            rightIcon={<CommunicationChatBubble />} />
-        <ListItem
-            primaryText='Jack Woltz'
-            leftIcon={<PersonIcon />}
-            rightIcon={<CommunicationChatBubble />} />
+        <FriendListItem
+            username='Michael Lee'
+            onFriendClick={onFriendClick} />
+        <FriendListItem
+            username='Peter Clemenza'
+            onFriendClick={onFriendClick} />
+        <FriendListItem
+            username='Tommy Hangen'
+            onFriendClick={onFriendClick} />
+        <FriendListItem
+            username='Jack Woltz'
+            onFriendClick={onFriendClick} />
     </List>
 );
 
