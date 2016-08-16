@@ -5,8 +5,8 @@ import Header from 'Layout/components/Header.js';
 import FriendsPanel from 'Friends/components/FriendsPanel.js';
 import InvitationsDialog from 'Friends/components/InvitationsDialog.js';
 import ChatPanel from 'Chat/components/ChatPanel.js';
-import * as inActions from 'User/reducers/auth.js';
-import * as outActions from '$shared/User/auth-out.js';
+import * as authActions from 'User/actions/auth.js';
+import authConstants from '$shared/User/auth.js';
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -26,14 +26,14 @@ class HomePage extends React.Component {
     }
 
     prepareSocket() {
-        this.socket = io.connect(outActions.SOCKET_NAMESPACE);
-        this.socket.on(inActions.LOG_OUT_SUCCESS, () => {
+        this.socket = io.connect(authConstants.SOCKET.NAMESPACE);
+        this.socket.on(authConstants.SERVER.LOG_OUT_SUCCESS, () => {
             this.props.handleLogOut();
         });
     }
 
     logOut() {
-        this.socket.emit(outActions.LOG_OUT, this.props.sessionId);
+        this.socket.emit(authConstants.CLIENT.LOG_OUT, this.props.sessionId);
     }
 
     showInvitationsDialog() {
@@ -107,7 +107,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     handleLogOut: () => {
-        dispatch(inActions.logOut());
+        dispatch(authActions.logOut());
     },
 });
 

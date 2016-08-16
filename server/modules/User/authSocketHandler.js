@@ -1,16 +1,8 @@
 var logSocketAction = require('../../socket/loggingHelper.js');
-var clientActions = require('../../../shared/User/auth-out.js');
+var authConstants = require('../../../shared/User/auth.js');
 
 var USER_TABLE_NAME = 'user';
 var SESSION_TABLE_NAME = 'session';
-
-var ENTITY_NAME = 'auth';
-
-var REGISTER_SUCCESS_SUFFIX = ':REGISTER_SUCCESS';
-var REGISTER_ERROR_SUFFIX = ':REGISTER_ERROR';
-var LOG_IN_SUCCESS_SUFFIX = ':LOG_IN_SUCCESS';
-var LOG_IN_ERROR_SUFFIX = ':LOG_IN_ERROR';
-var LOG_OUT_SUCCESS_SUFFIX = ':LOG_OUT_SUCCESS';
 
 var userExists = function(rethinkDB, connection, data, onMissing, onFound) {
     rethinkDB.table(USER_TABLE_NAME)
@@ -91,8 +83,8 @@ module.exports = function(socket, rethinkDB, connection) {
 
 
 
-    socket.on(clientActions.REGISTER, function(data) {
-        logSocketAction(clientActions.REGISTER);
+    socket.on(authConstants.CLIENT.REGISTER, function(data) {
+        logSocketAction(authConstants.CLIENT.REGISTER);
 
         var registrationData = {
             username: data.username,
@@ -102,24 +94,24 @@ module.exports = function(socket, rethinkDB, connection) {
         try {
             userExists(rethinkDB, connection, { username: registrationData.username }, () => {
                 createUser(rethinkDB, connection, registrationData, (userId) => {
-                    socket.emit(ENTITY_NAME + REGISTER_SUCCESS_SUFFIX, {
+                    socket.emit(authConstants.SERVER.REGISTER_SUCCESS, {
                         username: registrationData.username,
                     });
                 });
             }, (userId) => {
                 var errorMessage = 'Username already taken, please use different';
-                socket.emit(ENTITY_NAME + REGISTER_ERROR_SUFFIX, errorMessage);
+                socket.emit(authConstants.SERVER.REGISTER_ERROR, errorMessage);
             });
         } catch (err) {
             var errorMessage = 'Registration error';
-            socket.emit(ENTITY_NAME + REGISTER_ERROR_SUFFIX, errorMessage);
+            socket.emit(authConstants.SERVER.REGISTER_ERROR, errorMessage);
         }
     });
 
 
 
-    socket.on(clientActions.LOG_IN, function(data) {
-        logSocketAction(clientActions.LOG_IN);
+    socket.on(authConstants.CLIENT.LOG_IN, function(data) {
+        logSocketAction(authConstants.CLIENT.LOG_IN);
 
         var credentials = {
             username: data.username,
@@ -129,10 +121,10 @@ module.exports = function(socket, rethinkDB, connection) {
         try {
             userExists(rethinkDB, connection, credentials, () => {
                 var errorMessage = 'User not found: please, check your credentials';
-                socket.emit(ENTITY_NAME + LOG_IN_ERROR_SUFFIX, errorMessage);
+                socket.emit(authConstants.SERVER.LOG_IN_ERROR, errorMessage);
             }, (userId) => {
                 startUserSession(rethinkDB, connection, userId, (sessionId) => {
-                    socket.emit(ENTITY_NAME + LOG_IN_SUCCESS_SUFFIX, {
+                    socket.emit(authConstants.SERVER.LOG_IN_SUCCESS, {
                         username: credentials.username,
                         sessionId,
                     });
@@ -140,16 +132,16 @@ module.exports = function(socket, rethinkDB, connection) {
             })
         } catch (err) {
             var errorMessage = 'Login error';
-            socket.emit(ENTITY_NAME + LOG_IN_ERROR_SUFFIX, errorMessage);
+            socket.emit(authConstants.SERVER.LOG_IN_ERROR, errorMessage);
         }
     });
 
-    socket.on(clientActions.LOG_OUT, function(sessionId) {
-        logSocketAction(clientActions.LOG_OUT);
+    socket.on(authConstants.CLIENT.LOG_OUT, function(sessionId) {
+        logSocketAction(authConstants.CLIENT.LOG_OUT);
 
         try {
             endUserSession(rethinkDB, connection, sessionId, () => {
-                socket.emit(ENTITY_NAME + LOG_OUT_SUCCESS_SUFFIX, {});
+                socket.emit(authConstants.SERVER.LOG_OUT_SUCCESS, {});
             });
         } catch (err) {
             throw err;

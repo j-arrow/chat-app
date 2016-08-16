@@ -11,8 +11,8 @@ import { FormsyText } from 'formsy-material-ui/lib';
 import { NotificationManager } from 'react-notifications';
 import { withRouter, Link } from 'react-router';
 import { connect } from 'react-redux';
-import * as inActions from '../reducers/auth.js';
-import * as outActions from '$shared/User/auth-out.js';
+import * as authActions from '../actions/auth.js';
+import authConstants from '$shared/User/auth.js';
 
 const styles = {
     paper: {
@@ -61,8 +61,8 @@ class RegisterForm extends React.Component {
     }
 
     prepareSocket() {
-        this.socket = io.connect(outActions.SOCKET_NAMESPACE);
-        this.socket.on(inActions.REGISTER_SUCCESS, registrationData => {
+        this.socket = io.connect(authConstants.SOCKET.NAMESPACE);
+        this.socket.on(authConstants.SERVER.REGISTER_SUCCESS, registrationData => {
             this.setState({
                 formValidationError: '',
             });
@@ -74,7 +74,7 @@ class RegisterForm extends React.Component {
             );
             this.props.redirectToLogin();
         });
-        this.socket.on(inActions.REGISTER_ERROR, errorMessage => {
+        this.socket.on(authConstants.SERVER.REGISTER_ERROR, errorMessage => {
             this.setState({
                 formValidationError: errorMessage,
             });
@@ -82,7 +82,7 @@ class RegisterForm extends React.Component {
     }
 
     submitForm(data) {
-        this.socket.emit(outActions.REGISTER, data);
+        this.socket.emit(authConstants.CLIENT.REGISTER, data);
     }
 
     render() {
@@ -200,7 +200,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     handleRegister: (registrationData) => {
-        dispatch(inActions.register(registrationData));
+        dispatch(authActions.register(registrationData));
     },
 });
 
