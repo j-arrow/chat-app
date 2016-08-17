@@ -1,6 +1,26 @@
 var USER_TABLE_NAME = 'user';
 var SESSION_TABLE_NAME = 'session';
 
+var search = (rethinkDB, connection, username, onSuccess) => {
+    rethinkDB.table(USER_TABLE_NAME)
+        .filter(user => {
+            return user('username').match('(?i)' + username);
+        })
+        .run(connection, (err, cursor) => {
+            if (err) {
+                throw err;
+            }
+
+            cursor.toArray((err, usersObj) => {
+                if (err) {
+                    throw err;
+                }
+                onSuccess(usersObj);
+                return usersObj;
+            });
+        });
+}
+
 var create = (rethinkDB, connection, data, onSuccess) => {
     rethinkDB.table(USER_TABLE_NAME)
         .insert({
@@ -73,6 +93,7 @@ var endSession = (rethinkDB, connection, sessionId, onSuccess) => {
 }
 
 module.exports = {
+    search: search,
     create: create,
     exists: exists,
     startSession: startSession,

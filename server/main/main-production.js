@@ -13,6 +13,7 @@ var r = require('rethinkdb');
 var webpackConfig = require('../../webpack.production.config.js');
 
 var authNamespaceHandler = require('../modules/User/authNamespaceHandler.js');
+var userNamespaceHandler = require('../modules/User/userNamespaceHandler.js');
 
 app.use(
     webpackConfig.output.publicPath,
@@ -33,6 +34,7 @@ r.connect({
 }).then(function(connection) {
 
     authNamespaceHandler(io, connection, r);
+    userNamespaceHandler(io, connection, r);
 
     server.listen(config.server.port,
         () => {
