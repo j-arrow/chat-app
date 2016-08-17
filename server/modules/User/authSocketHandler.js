@@ -4,7 +4,7 @@ var user = require('./user.js');
 
 var validateCredentials = (credentials) => {
     var passwordRegexp = /^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])[\w\d!@#$%_]{6,15}$/;
-    var usernameRegexp = /^.{5,15}/;
+    var usernameRegexp = /^.{5,15}$/;
     if (!passwordRegexp.test(credentials.password)) {
         throw 'Password requirements not met';
     } else if (credentials.password !== credentials.repeatPassword) {
@@ -76,6 +76,8 @@ module.exports = (socket, rethinkDB, connection) => {
             socket.emit(authConstants.SERVER.LOG_IN_ERROR, errorMessage);
         }
     });
+
+
 
     socket.on(authConstants.CLIENT.LOG_OUT, (sessionId) => {
         logSocketAction(authConstants.CLIENT.LOG_OUT);
