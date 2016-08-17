@@ -1,8 +1,8 @@
-const clientAction = function(name) {
+const clientAction = (name) => {
     return 'auth:client:' + name;
 }
 
-const serverAction = function(name) {
+const serverAction = (name) => {
     return 'auth:server:' + name;
 }
 

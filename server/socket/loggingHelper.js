@@ -4,7 +4,7 @@ const FG_CYAN_COLOR = '\x1b[36m';
 const BG_BLACK_COLOR = '\x1b[40m';
 const RESET_COLOR = '\x1b[0m';
 
-module.exports = function(actionType) {
+module.exports = (actionType) => {
     console.log(
         ' ',
         FG_BLUE_COLOR + '--> @' +
@@ -14,15 +14,15 @@ module.exports = function(actionType) {
     );
 };
 
-const repeat = function(str, times) {
+const repeat = (str, times) => {
     return new Array(times + 1).join(str);
 };
 
-const pad = function(num, maxLength) {
+const pad = (num, maxLength) => {
     return repeat('0', maxLength - num.toString().length) + num;
 }
 
-const printCurrentDate = function() {
+const printCurrentDate = () => {
     var now = new Date();
     var hours = now.getHours();
     var minutes = now.getMinutes();

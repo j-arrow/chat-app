@@ -2,7 +2,7 @@ var logSocketAction = require('../../socket/loggingHelper.js');
 var authConstants = require('../../../shared/User/auth.js');
 var user = require('./user.js');
 
-var validateCredentials = function(credentials) {
+var validateCredentials = (credentials) => {
     var passwordRegexp = /^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])[\w\d!@#$%_]{6,15}$/;
     var usernameRegexp = /^.{5,15}/;
     if (!passwordRegexp.test(credentials.password)) {

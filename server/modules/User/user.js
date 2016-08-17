@@ -7,7 +7,7 @@ var create = (rethinkDB, connection, data, onSuccess) => {
             username: data.username,
             password: data.password,
         })
-        .run(connection, function(err, cursor) {
+        .run(connection, (err, cursor) => {
             if (err) {
                 throw err;
             }
@@ -21,11 +21,11 @@ var exists = (rethinkDB, connection, data, onMissing, onFound) => {
     rethinkDB.table(USER_TABLE_NAME)
         .filter(data)
         .limit(1)
-        .run(connection, function(err, cursor) {
+        .run(connection, (err, cursor) => {
             if (err) {
                 throw err;
             }
-            cursor.next(function(err, row) {
+            cursor.next((err, row) => {
                 if (err) {
                     if (err.name === 'ReqlDriverError' && err.message === 'No more rows in the cursor.') {
                         onMissing();
@@ -48,7 +48,7 @@ var startSession = (rethinkDB, connection, userId, onSuccess) => {
             userId,
             startDate: new Date(),
         })
-        .run(connection, function(err, cursor) {
+        .run(connection, (err, cursor) => {
             if (err) {
                 throw err;
             }
@@ -64,7 +64,7 @@ var endSession = (rethinkDB, connection, sessionId, onSuccess) => {
         .update({
             endDate: new Date(),
         })
-        .run(connection, function(err, cursor) {
+        .run(connection, (err, cursor) => {
             if (err) {
                 throw err;
             }
