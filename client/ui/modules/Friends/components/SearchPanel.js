@@ -1,37 +1,74 @@
 import React from 'react';
+import { Divider } from 'material-ui';
+import {
+    Table,
+    TableBody,
+    TableHeader,
+    TableHeaderColumn,
+    TableRow } from 'material-ui/Table';
 import SearchForm from './SearchForm.js';
-import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
+import UserTableRow from './UserTableRow.js';
+import userConstants from '$shared/User/user.js';
 
-const SearchPanel = () => (
-    <div>
-    <SearchForm />
-    <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHeaderColumn>ID</TableHeaderColumn>
-            <TableHeaderColumn>Name</TableHeaderColumn>
-            <TableHeaderColumn>Status</TableHeaderColumn>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
-            <TableRowColumn>1</TableRowColumn>
-            <TableRowColumn>John Smith</TableRowColumn>
-            <TableRowColumn>Employed</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableRowColumn>2</TableRowColumn>
-            <TableRowColumn>Randal White</TableRowColumn>
-            <TableRowColumn>Unemployed</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableRowColumn>3</TableRowColumn>
-            <TableRowColumn>Stephanie Sanders</TableRowColumn>
-            <TableRowColumn>Employed</TableRowColumn>
-          </TableRow>
-        </TableBody>
-      </Table>
-  </div>
-);
+class SearchPanel extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            results: [],
+        };
+
+        this.searchUsers = this.searchUsers.bind(this);
+        this.prepareSocket = this.prepareSocket.bind(this);
+        this.prepareSocket();
+    }
+
+    prepareSocket() {
+        this.socket = io.connect(userConstants.SOCKET.NAMESPACE);
+        this.socket.on(userConstants.SERVER.SEARCH_SUCCESS, users => {
+            this.setState({
+                results: users,
+            });
+        });
+        this.socket.on(userConstants.SERVER.SEARCH_ERROR, errorMessage => {
+            // TODO
+        });
+    }
+
+    searchUsers(username) {
+        this.socket.emit(userConstants.CLIENT.SEARCH, username);
+    }
+
+    render() {
+        let { results } = this.state;
+
+        return (
+            <div>
+                <SearchForm
+                    onSearch={this.searchUsers} />
+                <hr />
+                <Table>
+                    <TableHeader
+                        displaySelectAll={false}
+                        adjustForCheckbox={false}>
+                        <TableRow>
+                            <TableHeaderColumn>Name</TableHeaderColumn>
+                            <TableHeaderColumn>Invite</TableHeaderColumn>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody
+                        displayRowCheckbox={false}>
+
+                        {results.map((user, i) =>
+                            <UserTableRow
+                                key={i}
+                                username={user.username} />
+                        )}
+
+                    </TableBody>
+                </Table>
+            </div>
+        );
+    }
+}
 
 export default SearchPanel;

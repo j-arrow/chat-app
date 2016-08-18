@@ -4,7 +4,9 @@ var SESSION_TABLE_NAME = 'session';
 var search = (rethinkDB, connection, username, onSuccess) => {
     rethinkDB.table(USER_TABLE_NAME)
         .filter(user => {
-            return user('username').match('(?i)' + username);
+            return user('username').match('(?i)' + username); // TODO fix
+            // regexp because it does not handle special characters such as
+            // # or $ appropriately
         })
         .run(connection, (err, cursor) => {
             if (err) {
