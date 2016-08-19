@@ -8,34 +8,56 @@ import {
     TableRow } from 'material-ui/Table';
 import SearchForm from './SearchForm.js';
 import UserTableRow from './UserTableRow.js';
+import { connect } from 'react-redux';
 import userConstants from '$shared/User/user.js';
+import friendsConstants from '$shared/Friends/friends.js';
 
 class SearchPanel extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             results: [],
         };
 
         this.searchUsers = this.searchUsers.bind(this);
-        this.prepareSocket = this.prepareSocket.bind(this);
-        this.prepareSocket();
+        this.sendInvitation = this.sendInvitation.bind(this);
+        this.prepareUserSocket();
+        this.prepareFriendsSocket();
     }
 
-    prepareSocket() {
-        this.socket = io.connect(userConstants.SOCKET.NAMESPACE);
-        this.socket.on(userConstants.SERVER.SEARCH_SUCCESS, users => {
+    prepareUserSocket() {
+        this.userSocket = io.connect(userConstants.SOCKET.NAMESPACE);
+        this.userSocket.on(userConstants.SERVER.SEARCH_SUCCESS, users => {
             this.setState({
                 results: users,
             });
         });
-        this.socket.on(userConstants.SERVER.SEARCH_ERROR, errorMessage => {
+        this.userSocket.on(userConstants.SERVER.SEARCH_ERROR, errorMessage => {
+            // TODO
+        });
+    }
+
+    prepareFriendsSocket() {
+        this.friendsSocket = io.connect(friendsConstants.SOCKET.NAMESPACE);
+        this.friendsSocket.on(friendsConstants.SERVER.INVITE_SUCCESS, () => {
+            console.log('CLIENT: invitation was sent indeed');
+        });
+        this.friendsSocket.on(friendsConstants.SERVER.INVITE_ERROR, errorMessage => {
             // TODO
         });
     }
 
     searchUsers(username) {
-        this.socket.emit(userConstants.CLIENT.SEARCH, username);
+        this.userSocket.emit(userConstants.CLIENT.SEARCH, username);
+    }
+
+    sendInvitation(userId) {
+        let { sessionId } = this.props;
+
+        this.friendsSocket.emit(friendsConstants.CLIENT.INVITE, {
+            userId,
+            sessionId,
+        });
     }
 
     render() {
@@ -61,7 +83,10 @@ class SearchPanel extends React.Component {
                         {results.map((user, i) =>
                             <UserTableRow
                                 key={i}
-                                username={user.username} />
+                                username={user.username}
+                                sendInvitation={() => {
+                                    this.sendInvitation(user.id);
+                                }} />
                         )}
 
                     </TableBody>
@@ -71,4 +96,19 @@ class SearchPanel extends React.Component {
     }
 }
 
-export default SearchPanel;
+let SearchPanelContainer = ({
+    sessionId,
+}) => (
+    <SearchPanel
+        sessionId={sessionId} />
+);
+
+const mapStateToProps = (state) => ({
+    sessionId: state.auth.sessionId,
+});
+
+SearchPanelContainer = connect(
+    mapStateToProps
+)(SearchPanelContainer);
+
+export default SearchPanelContainer;

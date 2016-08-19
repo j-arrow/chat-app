@@ -24,6 +24,20 @@ var search = (rethinkDB, connection, username, onSuccess) => {
         });
 }
 
+var getForSession = (rethinkDB, connection, sessionId, onSuccess) => {
+    rethinkDB.table(SESSION_TABLE_NAME)
+        .get(sessionId)
+        .run(connection, (err, row) => {
+            if (err) {
+                console.log('ERR#1:', err);
+                throw err;
+            }
+            console.log('no error #2');
+            onSuccess(row);
+            return row;
+        });
+}
+
 var create = (rethinkDB, connection, data, onSuccess) => {
     rethinkDB.table(USER_TABLE_NAME)
         .insert({
@@ -60,7 +74,6 @@ var exists = (rethinkDB, connection, data, onMissing, onFound) => {
                     onFound(row.id);
                     return true;
                 }
-
             });
         });
 };
@@ -97,6 +110,7 @@ var endSession = (rethinkDB, connection, sessionId, onSuccess) => {
 
 module.exports = {
     search: search,
+    getForSession: getForSession,
     create: create,
     exists: exists,
     startSession: startSession,
