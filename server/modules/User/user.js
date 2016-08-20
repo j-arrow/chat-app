@@ -29,10 +29,8 @@ var getForSession = (rethinkDB, connection, sessionId, onSuccess) => {
         .get(sessionId)
         .run(connection, (err, row) => {
             if (err) {
-                console.log('ERR#1:', err);
                 throw err;
             }
-            console.log('no error #2');
             onSuccess(row);
             return row;
         });

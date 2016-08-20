@@ -19,10 +19,11 @@ module.exports = (socket, rethinkDB, connection) => {
                     senderId: user.id,
                     recipientId: invitationData.userId,
                 };
-                console.log('User for session FOUND');
-                friends.invite(rethinkDB, connection, inviteData, invitationId => {
-                    console.log('INVITATION ID:', invitationId);
-                    socket.emit(friendsConstants.SERVER.INVITE_SUCCESS, {});
+                friends.checkUnique(rethinkDB, connection, inviteData, () => {
+                    friends.invite(rethinkDB, connection, inviteData, invitationId => {
+                        console.log('INVITATION ID:', invitationId);
+                        socket.emit(friendsConstants.SERVER.INVITE_SUCCESS, {});
+                    });
                 });
             });
         } catch (err) {
