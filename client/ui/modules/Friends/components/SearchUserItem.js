@@ -4,7 +4,7 @@ import {
     TableRow,
     TableRowColumn } from 'material-ui/Table';
 
-const UserTableRow = ({
+const SearchUserItem = ({
     username,
     sendInvitation
 }) => (
@@ -20,4 +20,4 @@ const UserTableRow = ({
     </TableRow>
 );
 
-export default UserTableRow;
+export default SearchUserItem;
