@@ -1,14 +1,15 @@
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
-var config = require('../../webpack.dev.config.js');
+var webpackConfig = require('../../webpack.dev.config.js');
+var config = require('../../config.js');
 
-new WebpackDevServer(webpack(config), {
-    publicPath: config.output.publicPath,
+new WebpackDevServer(webpack(webpackConfig), {
+    publicPath: webpackConfig.output.publicPath,
     hot: true,
     historyApiFallback: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
     proxy: {
-        '*': 'http://localhost:9000'
+        '*': 'http://localhost:' + config.server.port
     },
 }).listen(9001, 'localhost', function(err, result) {
     if (err) {
