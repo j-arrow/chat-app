@@ -1,26 +1,35 @@
+var userQuery = require('./userQuery.js');
+
 var USER_TABLE_NAME = 'user';
 var SESSION_TABLE_NAME = 'session';
 
-var search = (rethinkDB, connection, username, onSuccess) => {
-    rethinkDB.table(USER_TABLE_NAME)
-        .filter(user => {
-            var escaped = username.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-            // escaped - any special characters (e.g. '$') are escaped
-            // to be used as regexp
-            return user('username').match('(?i)' + escaped);
-        })
-        .run(connection, (err, cursor) => {
+var search = (rethinkDB, connection, query, onSuccess) => {
+    var dbTable = rethinkDB.table(USER_TABLE_NAME);
+    dbTable = userQuery.apply(dbTable, query);
+    dbTable.run(connection, (err, cursor) => {
+        if (err) {
+            throw err;
+        }
+
+        cursor.toArray((err, usersObj) => {
             if (err) {
                 throw err;
             }
+            onSuccess(usersObj);
+            return usersObj;
+        });
+    });
+}
 
-            cursor.toArray((err, usersObj) => {
-                if (err) {
-                    throw err;
-                }
-                onSuccess(usersObj);
-                return usersObj;
-            });
+var getForSession = (rethinkDB, connection, sessionId, onSuccess) => {
+    rethinkDB.table(SESSION_TABLE_NAME)
+        .get(sessionId)
+        .run(connection, (err, row) => {
+            if (err) {
+                throw err;
+            }
+            onSuccess(row);
+            return row;
         });
 }
 
@@ -60,7 +69,6 @@ var exists = (rethinkDB, connection, data, onMissing, onFound) => {
                     onFound(row.id);
                     return true;
                 }
-
             });
         });
 };
@@ -97,6 +105,7 @@ var endSession = (rethinkDB, connection, sessionId, onSuccess) => {
 
 module.exports = {
     search: search,
+    getForSession: getForSession,
     create: create,
     exists: exists,
     startSession: startSession,

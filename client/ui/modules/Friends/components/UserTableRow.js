@@ -6,6 +6,7 @@ import {
 
 const UserTableRow = ({
     username,
+    sendInvitation
 }) => (
     <TableRow>
         <TableRowColumn>
@@ -13,7 +14,8 @@ const UserTableRow = ({
         </TableRowColumn>
         <TableRowColumn>
             <FlatButton
-                label='Invite' />
+                label='Invite'
+                onClick={sendInvitation} />
         </TableRowColumn>
     </TableRow>
 );

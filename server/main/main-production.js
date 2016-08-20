@@ -14,6 +14,7 @@ var webpackConfig = require('../../webpack.production.config.js');
 
 var authNamespaceHandler = require('../modules/User/authNamespaceHandler.js');
 var userNamespaceHandler = require('../modules/User/userNamespaceHandler.js');
+var friendsNamespaceHandler = require('../modules/Friends/friendsNamespaceHandler.js');
 
 app.use(
     webpackConfig.output.publicPath,
@@ -35,6 +36,7 @@ r.connect({
 
     authNamespaceHandler(io, connection, r);
     userNamespaceHandler(io, connection, r);
+    friendsNamespaceHandler(io, connection, r);
 
     server.listen(config.server.port,
         () => {
