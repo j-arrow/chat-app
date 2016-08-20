@@ -48,7 +48,7 @@ class SearchPanel extends React.Component {
     }
 
     searchUsers(username) {
-        this.userSocket.emit(userConstants.CLIENT.SEARCH, username);
+        this.userSocket.emit(userConstants.CLIENT.SEARCH, { username });
     }
 
     sendInvitation(userId) {
