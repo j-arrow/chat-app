@@ -12,8 +12,12 @@ module.exports = (socket, rethinkDB, connection) => {
             user.getSession(rethinkDB, connection, query.sessionId, session => {
                 delete query.sessionId;
                 query.userId = session.userId;
-                friends.searchInvitations(rethinkDB, connection, query, invitations => {
+                friends.searchInvitations(rethinkDB, connection, query, invitationsWithRecipients => {
                     if (query.type === 'sent') {
+                        var invitations = invitationsWithRecipients.map(element => ({
+                            id: element.left.id,
+                            username: element.right.username,
+                        }));
                         socket.emit(friendsConstants.SERVER.SEARCH_SENT_INVITATIONS_SUCCESS, invitations);
                     } else if (query.type === 'pending') {
                         // TODO later

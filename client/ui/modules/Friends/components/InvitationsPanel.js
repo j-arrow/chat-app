@@ -18,8 +18,10 @@ class InvitationsPanel extends React.Component {
 
     prepareFriendsSocket() {
         this.friendsSocket = io.connect(friendsConstants.SOCKET.NAMESPACE);
-        this.friendsSocket.on(friendsConstants.SERVER.SEARCH_SENT_INVITATIONS_SUCCESS, invitations => {
-            console.log(invitations);
+        this.friendsSocket.on(friendsConstants.SERVER.SEARCH_SENT_INVITATIONS_SUCCESS, sentInvitations => {
+            this.setState({
+                sentInvitations,
+            });
         });
         this.friendsSocket.on(friendsConstants.SERVER.SEARCH_SENT_INVITATIONS_ERROR, errorMessage => {
             console.log(errorMessage);
