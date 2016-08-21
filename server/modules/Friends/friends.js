@@ -1,4 +1,5 @@
 var user = require('../User/user.js');
+var invitationsQueryApplier = require('./invitationsQueryApplier.js');
 
 var FRIENDS_INVITATION_TABLE_NAME = 'friends_invitation';
 
@@ -15,6 +16,24 @@ var violatesConstrains = (existing, newData) => {
     // are not unique excluding situation when invitation with same senderId and
     // recipientId exists but was rejected in the past
     return isNotUnique.and(isNotRejectedInPast);
+}
+
+var searchInvitations = (rethinkDB, connection, invitationsQuery, onSuccess) => {
+    var dbTable = rethinkDB.table(FRIENDS_INVITATION_TABLE_NAME);
+    dbTable = invitationsQueryApplier.apply(dbTable, invitationsQuery);
+    dbTable.run(connection, (err, cursor) => {
+        if (err) {
+            throw err;
+        }
+
+        cursor.toArray((err, invitationsObj) => {
+            if (err) {
+                throw err;
+            }
+            onSuccess(invitationsObj);
+            return invitationsObj;
+        });
+    });
 }
 
 var checkUnique = (rethinkDB, connection, data, onUnique) => {
@@ -60,6 +79,7 @@ var invite = (rethinkDB, connection, data, onSuccess) => {
 }
 
 module.exports = {
+    searchInvitations: searchInvitations,
     checkUnique: checkUnique,
     invite: invite,
 }

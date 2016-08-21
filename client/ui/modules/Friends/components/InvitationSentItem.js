@@ -13,10 +13,7 @@ const InvitationSentItem = ({
       </TableRowColumn>
       <TableRowColumn>
           <FlatButton
-              label='Accept'
-              primary={true} />
-          <FlatButton
-              label='Reject'
+              label='Cancel'
               secondary={true} />
       </TableRowColumn>
     </TableRow>

@@ -17,27 +17,35 @@ const tempInvitationsSent = [
     }
 ];
 
-const InvitationsSentPanel = () => (
-    <Table>
-        <TableHeader
-            displaySelectAll={false}
-            adjustForCheckbox={false}>
-            <TableRow>
-                <TableHeaderColumn>Name</TableHeaderColumn>
-                <TableHeaderColumn>Actions</TableHeaderColumn>
-            </TableRow>
-        </TableHeader>
-        <TableBody
-            displayRowCheckbox={false}>
+class InvitationsSentPanel extends React.Component {
+    constructor(props) {
+        super(props);
+    }
 
-            {tempInvitationsSent.map((invitation, i) =>
-                <InvitationSentItem
-                    key={i}
-                    username={invitation.username} />
-            )}
+    render() {
+        return (
+            <Table>
+                <TableHeader
+                    displaySelectAll={false}
+                    adjustForCheckbox={false}>
+                    <TableRow>
+                        <TableHeaderColumn>Name</TableHeaderColumn>
+                        <TableHeaderColumn>Cancel</TableHeaderColumn>
+                    </TableRow>
+                </TableHeader>
+                <TableBody
+                    displayRowCheckbox={false}>
 
-        </TableBody>
-      </Table>
-);
+                    {tempInvitationsSent.map((invitation, i) =>
+                        <InvitationSentItem
+                            key={i}
+                            username={invitation.username} />
+                    )}
+
+                </TableBody>
+            </Table>
+        );
+    }
+}
 
 export default InvitationsSentPanel;
