@@ -1,6 +1,7 @@
 var user = require('../User/user.js');
 var invitationsQueryApplier = require('./invitationsQueryApplier.js');
 
+var USER_TABLE_NAME = 'user';
 var FRIENDS_INVITATION_TABLE_NAME = 'friends_invitation';
 
 var violatesConstrains = (existing, newData) => {
@@ -19,19 +20,25 @@ var violatesConstrains = (existing, newData) => {
 }
 
 var searchInvitations = (rethinkDB, connection, invitationsQuery, onSuccess) => {
-    var dbTable = rethinkDB.table(FRIENDS_INVITATION_TABLE_NAME);
-    dbTable = invitationsQueryApplier.apply(dbTable, invitationsQuery);
-    dbTable.run(connection, (err, cursor) => {
+    var invDbTable = rethinkDB.table(FRIENDS_INVITATION_TABLE_NAME);
+    invDbTable = invitationsQueryApplier.apply(invDbTable, invitationsQuery);
+
+    // join recipients
+    var joinedDbTable = invDbTable.outerJoin(rethinkDB.table(USER_TABLE_NAME), (invRow, userRow) =>
+        invRow('recipientId').eq(userRow('id'))
+    );
+
+    joinedDbTable.run(connection, (err, cursor) => {
         if (err) {
             throw err;
         }
 
-        cursor.toArray((err, invitationsObj) => {
+        cursor.toArray((err, invitationsWithRecipientsObj) => {
             if (err) {
                 throw err;
             }
-            onSuccess(invitationsObj);
-            return invitationsObj;
+            onSuccess(invitationsWithRecipientsObj);
+            return invitationsWithRecipientsObj;
         });
     });
 }

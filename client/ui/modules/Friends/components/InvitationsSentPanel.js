@@ -7,22 +7,14 @@ import {
     TableRow } from 'material-ui/Table';
 import InvitationSentItem from './InvitationSentItem.js';
 
-const tempInvitationsSent = [
-    {
-        username: 'Tommy Johns',
-    }, {
-        username: 'Mike Tomphson',
-    }, {
-        username: 'Mark Philips',
-    }
-];
-
 class InvitationsSentPanel extends React.Component {
     constructor(props) {
         super(props);
     }
 
     render() {
+        let { invitations } = this.props;
+
         return (
             <Table>
                 <TableHeader
@@ -36,7 +28,7 @@ class InvitationsSentPanel extends React.Component {
                 <TableBody
                     displayRowCheckbox={false}>
 
-                    {tempInvitationsSent.map((invitation, i) =>
+                    {invitations.map((invitation, i) =>
                         <InvitationSentItem
                             key={i}
                             username={invitation.username} />
