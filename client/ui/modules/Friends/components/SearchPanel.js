@@ -7,7 +7,7 @@ import {
     TableHeaderColumn,
     TableRow } from 'material-ui/Table';
 import SearchForm from './SearchForm.js';
-import UserTableRow from './UserTableRow.js';
+import SearchUserItem from './SearchUserItem.js';
 import { connect } from 'react-redux';
 import userConstants from '$shared/User/user.js';
 import friendsConstants from '$shared/Friends/friends.js';
@@ -81,7 +81,7 @@ class SearchPanel extends React.Component {
                         displayRowCheckbox={false}>
 
                         {results.map((user, i) =>
-                            <UserTableRow
+                            <SearchUserItem
                                 key={i}
                                 username={user.username}
                                 sendInvitation={() => {

@@ -21,7 +21,7 @@ var search = (rethinkDB, connection, query, onSuccess) => {
     });
 }
 
-var getForSession = (rethinkDB, connection, sessionId, onSuccess) => {
+var getSession = (rethinkDB, connection, sessionId, onSuccess) => {
     rethinkDB.table(SESSION_TABLE_NAME)
         .get(sessionId)
         .run(connection, (err, row) => {
@@ -105,7 +105,7 @@ var endSession = (rethinkDB, connection, sessionId, onSuccess) => {
 
 module.exports = {
     search: search,
-    getForSession: getForSession,
+    getSession: getSession,
     create: create,
     exists: exists,
     startSession: startSession,

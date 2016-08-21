@@ -1,6 +1,6 @@
 import React from 'react';
 import { FlatButton, Dialog } from 'material-ui';
-import InvitationsPanel from './InvitationsPanel.js';
+import InvitationsPanelContainer from './InvitationsPanel.js';
 
 class InvitationsDialog extends React.Component {
     constructor() {
@@ -37,7 +37,7 @@ class InvitationsDialog extends React.Component {
                 open={this.state.open}
                 onRequestClose={this.close}>
 
-                    <InvitationsPanel />
+                    <InvitationsPanelContainer />
 
             </Dialog>
         );

@@ -5,6 +5,31 @@ var user = require('../User/user.js');
 
 module.exports = (socket, rethinkDB, connection) => {
 
+    socket.on(friendsConstants.CLIENT.SEARCH_INVITATIONS, query => {
+        logSocketAction(friendsConstants.CLIENT.SEARCH_INVITATIONS);
+
+        try {
+            user.getSession(rethinkDB, connection, query.sessionId, session => {
+                delete query.sessionId;
+                query.userId = session.userId;
+                friends.searchInvitations(rethinkDB, connection, query, invitations => {
+                    if (query.type === 'sent') {
+                        socket.emit(friendsConstants.SERVER.SEARCH_SENT_INVITATIONS_SUCCESS, invitations);
+                    } else if (query.type === 'pending') {
+                        // TODO later
+                    }
+                });
+            })
+        } catch (err) {
+            var errorMessage = 'Server error occurred, please, try again';
+            if (query.type === 'sent') {
+                socket.emit(friendsConstants.SERVER.SEARCH_SENT_INVITATIONS_ERROR, errorMessage);
+            } else if (query.type === 'pending') {
+                // TODO later
+            }
+        }
+    });
+
     socket.on(friendsConstants.CLIENT.INVITE, data => {
         logSocketAction(friendsConstants.CLIENT.INVITE);
 
@@ -14,14 +39,13 @@ module.exports = (socket, rethinkDB, connection) => {
         };
 
         try {
-            user.getForSession(rethinkDB, connection, invitationData.sessionId, user => {
+            user.getSession(rethinkDB, connection, invitationData.sessionId, session => {
                 var inviteData = {
-                    senderId: user.id,
+                    senderId: session.userId,
                     recipientId: invitationData.userId,
                 };
                 friends.checkUnique(rethinkDB, connection, inviteData, () => {
                     friends.invite(rethinkDB, connection, inviteData, invitationId => {
-                        console.log('INVITATION ID:', invitationId);
                         socket.emit(friendsConstants.SERVER.INVITE_SUCCESS, {});
                     });
                 });

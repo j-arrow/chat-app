@@ -1,28 +1,51 @@
 import React from 'react';
-import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
+import {
+    Table,
+    TableBody,
+    TableHeader,
+    TableHeaderColumn,
+    TableRow } from 'material-ui/Table';
+import InvitationSentItem from './InvitationSentItem.js';
 
-const InvitationsSentPanel = () => (
-    <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHeaderColumn>ID</TableHeaderColumn>
-            <TableHeaderColumn>Name</TableHeaderColumn>
-            <TableHeaderColumn>Status</TableHeaderColumn>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
-            <TableRowColumn>1</TableRowColumn>
-            <TableRowColumn>John Smith</TableRowColumn>
-            <TableRowColumn>Employed</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableRowColumn>2</TableRowColumn>
-            <TableRowColumn>Randal White</TableRowColumn>
-            <TableRowColumn>Unemployed</TableRowColumn>
-          </TableRow>
-        </TableBody>
-      </Table>
-);
+const tempInvitationsSent = [
+    {
+        username: 'Tommy Johns',
+    }, {
+        username: 'Mike Tomphson',
+    }, {
+        username: 'Mark Philips',
+    }
+];
+
+class InvitationsSentPanel extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <Table>
+                <TableHeader
+                    displaySelectAll={false}
+                    adjustForCheckbox={false}>
+                    <TableRow>
+                        <TableHeaderColumn>Name</TableHeaderColumn>
+                        <TableHeaderColumn>Cancel</TableHeaderColumn>
+                    </TableRow>
+                </TableHeader>
+                <TableBody
+                    displayRowCheckbox={false}>
+
+                    {tempInvitationsSent.map((invitation, i) =>
+                        <InvitationSentItem
+                            key={i}
+                            username={invitation.username} />
+                    )}
+
+                </TableBody>
+            </Table>
+        );
+    }
+}
 
 export default InvitationsSentPanel;
