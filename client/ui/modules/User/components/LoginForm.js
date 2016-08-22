@@ -12,7 +12,6 @@ import { NotificationManager } from 'react-notifications';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router';
 import * as authActions from '../actions/auth.js';
-import authConstants from '$shared/User/auth.js';
 
 const styles = {
     paper: {
@@ -35,10 +34,6 @@ class LoginForm extends React.Component {
         this.state = {
             formValidationError: '',
         };
-
-        this.submitForm = this.submitForm.bind(this);
-        this.prepareSocket = this.prepareSocket.bind(this);
-        this.prepareSocket();
     }
 
     componentDidMount() {
@@ -47,39 +42,13 @@ class LoginForm extends React.Component {
         }
     }
 
-    prepareSocket() {
-        this.socket = io.connect(authConstants.SOCKET.NAMESPACE);
-        this.socket.on(authConstants.SERVER.LOG_IN_SUCCESS, data => {
-            this.setState({
-                formValidationError: '',
-            });
-            this.props.handleLogIn(data);
-            NotificationManager.success(
-                'You logged in!',
-                'Login successful',
-                3000
-            );
-            this.props.redirectToHome();
-        });
-        this.socket.on(authConstants.SERVER.LOG_IN_ERROR, errorMessage => {
-            this.setState({
-                formValidationError: errorMessage,
-            });
-        });
-    }
-
-    submitForm(data) {
-        this.socket.emit(authConstants.CLIENT.LOG_IN, data);
-    }
-
     render() {
         return (
             <Paper
                 style={styles.paper}>
                 <h2>Login form</h2>
                 <Divider />
-                <Formsy.Form
-                    onValidSubmit={this.submitForm}>
+                <Formsy.Form>
                     <FormsyText
                         name='username'
                         hintText='Please enter your username'

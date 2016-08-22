@@ -4,7 +4,7 @@ var webpack = require('webpack');
 module.exports = {
   devtool: 'inline-eval-cheap-source-map',
   entry: [
-      'webpack-dev-server/client?http://localhost:9001', // WebpackDevServer host and port
+      'webpack-dev-server/client?https://localhost:9001', // WebpackDevServer host and port
       'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
       path.join(__dirname, './client/main/main'),
   ],
@@ -20,6 +20,7 @@ module.exports = {
       }),
   ],
   module: {
+      noParse: [ 'ws' ],
       loaders: [{
           test: /.js?$/,
           loaders: [
@@ -33,11 +34,13 @@ module.exports = {
           ]
       }]
   },
+  externals: [ 'ws' ],
   resolve: {
     alias: {
       $shared: path.resolve('./shared'),
       $client: path.resolve('./client/modules'),
-      $server: path.resolve('./server/modules')
+      $server: path.resolve('./server/modules'),
+      $horizon: path.resolve('./client/horizon')
     },
     modulesDirectories: [
       'modules',

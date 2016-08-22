@@ -1,4 +1,23 @@
+# configuration
 config.js
-node_modules
+
+# distribution directory (static assets)
 dist
+
+# npm
+node_modules
 npm-debug.log
+
+# visual studio code
+.vscode
+jsconfig.json
+
+# https server
+cert.pem
+key.pem
+
+# horizon
+.hz
+rethinkdb_data
+horizon-cert.pem
+horizon-key.pem

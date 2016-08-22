@@ -60,6 +60,7 @@ module.exports = {
       publicPath: '/static/'
     },
     module: {
+        noParse: [ 'ws' ],
         loaders: [
             {
                 test: /\.scss$/,
@@ -78,6 +79,7 @@ module.exports = {
             }
         ]
     },
+    externals: [ 'ws' ],
     plugins: [
         new ExtractTextPlugin("[name].css"),
         new webpack.DefinePlugin({
@@ -88,7 +90,8 @@ module.exports = {
       alias: {
         $shared: path.resolve('./shared'),
         $client: path.resolve('./client/modules'),
-        $server: path.resolve('./server/modules')
+        $server: path.resolve('./server/modules'),
+        $horizon: path.resolve('./client/horizon')
       },
       modulesDirectories: [
         'modules',

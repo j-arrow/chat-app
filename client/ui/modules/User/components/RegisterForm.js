@@ -12,7 +12,6 @@ import { NotificationManager } from 'react-notifications';
 import { withRouter, Link } from 'react-router';
 import { connect } from 'react-redux';
 import * as authActions from '../actions/auth.js';
-import authConstants from '$shared/User/auth.js';
 
 const styles = {
     paper: {
@@ -31,58 +30,12 @@ const styles = {
     },
 };
 
-Formsy.addValidationRule('isPassword', (values, value) => {
-    // Password must be 6-15 characters - {6,15} Must have no spaces,
-    // at least 1 digit (?=.*[\d]), at least 1 uppercase letter
-    // (?=.*[A-Z]) and at least one lowercase letter (?=.*[a-z]).
-    // Allows specifying special characters - !@#$%_
-    return /^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])[\w\d!@#$%_]{6,15}$/.test(value);
-});
-Formsy.addValidationRule('matchMainPassword', (values, value) => {
-    return value === values.password;
-});
-
 class RegisterForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             formValidationError: '',
         };
-
-        this.submitForm = this.submitForm.bind(this);
-        this.prepareSocket = this.prepareSocket.bind(this);
-        this.prepareSocket();
-    }
-
-    componentDidMount() {
-        if (this.props.loggedIn) {
-            this.props.redirectToHome();
-        }
-    }
-
-    prepareSocket() {
-        this.socket = io.connect(authConstants.SOCKET.NAMESPACE);
-        this.socket.on(authConstants.SERVER.REGISTER_SUCCESS, registrationData => {
-            this.setState({
-                formValidationError: '',
-            });
-            this.props.handleRegister(registrationData);
-            NotificationManager.success(
-                'You registered successfully, please log in!',
-                'Registration successful',
-                3000
-            );
-            this.props.redirectToLogin();
-        });
-        this.socket.on(authConstants.SERVER.REGISTER_ERROR, errorMessage => {
-            this.setState({
-                formValidationError: errorMessage,
-            });
-        });
-    }
-
-    submitForm(data) {
-        this.socket.emit(authConstants.CLIENT.REGISTER, data);
     }
 
     render() {
@@ -93,17 +46,11 @@ class RegisterForm extends React.Component {
                     <div className='col-xs-7' style={styles.form}>
                         <h2>Register form</h2>
                         <Divider />
-                        <Formsy.Form
-                            onValidSubmit={this.submitForm}>
+                        <Formsy.Form>
                             <FormsyText
                                 name='username'
                                 hintText='Please enter your username'
                                 floatingLabelText='Username'
-                                validations={{
-                                    minLength:5,
-                                    maxLength:15
-                                }}
-                                validationError='Username must be 5-15 characters long'
                                 required
                                 fullWidth={true} />
                             <FormsyText
@@ -111,8 +58,6 @@ class RegisterForm extends React.Component {
                                 type='password'
                                 hintText='Please enter your password'
                                 floatingLabelText='Password'
-                                validations='isPassword'
-                                validationError='Password requirements not met'
                                 required
                                 fullWidth={true} />
                             <FormsyText
@@ -120,8 +65,6 @@ class RegisterForm extends React.Component {
                                 type='password'
                                 hintText='Please repeat your password'
                                 floatingLabelText='Repeat password'
-                                validations='matchMainPassword'
-                                validationError='Both passwords must match'
                                 required
                                 fullWidth={true} />
                             <div>
@@ -169,27 +112,23 @@ class RegisterForm extends React.Component {
 };
 
 RegisterForm.propTypes = {
-    loggedIn: React.PropTypes.bool.isRequired,
     redirectToHome: React.PropTypes.func.isRequired,
     redirectToLogin: React.PropTypes.func.isRequired,
     handleRegister: React.PropTypes.func.isRequired,
 };
 
 let RegisterFormContainer = ({
-    loggedIn,
     redirectToHome,
     redirectToLogin,
     handleRegister,
 }) => (
     <RegisterForm
-        loggedIn={loggedIn}
         redirectToHome={redirectToHome}
         redirectToLogin={redirectToLogin}
         handleRegister={handleRegister} />
 );
 
 const mapStateToProps = (state, ownProps) => ({
-    loggedIn: state.auth.loggedIn,
     redirectToHome: () => {
         ownProps.router.push('/');
     },

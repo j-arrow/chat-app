@@ -9,8 +9,6 @@ import {
 import SearchForm from './SearchForm.js';
 import SearchUserItem from './SearchUserItem.js';
 import { connect } from 'react-redux';
-import userConstants from '$shared/User/user.js';
-import friendsConstants from '$shared/Friends/friends.js';
 
 class SearchPanel extends React.Component {
     constructor(props) {
@@ -18,46 +16,6 @@ class SearchPanel extends React.Component {
         this.state = {
             results: [],
         };
-
-        this.searchUsers = this.searchUsers.bind(this);
-        this.sendInvitation = this.sendInvitation.bind(this);
-        this.prepareUserSocket();
-        this.prepareFriendsSocket();
-    }
-
-    prepareUserSocket() {
-        this.userSocket = io.connect(userConstants.SOCKET.NAMESPACE);
-        this.userSocket.on(userConstants.SERVER.SEARCH_SUCCESS, users => {
-            this.setState({
-                results: users,
-            });
-        });
-        this.userSocket.on(userConstants.SERVER.SEARCH_ERROR, errorMessage => {
-            // TODO
-        });
-    }
-
-    prepareFriendsSocket() {
-        this.friendsSocket = io.connect(friendsConstants.SOCKET.NAMESPACE);
-        this.friendsSocket.on(friendsConstants.SERVER.INVITE_SUCCESS, () => {
-            console.log('CLIENT: invitation was sent indeed');
-        });
-        this.friendsSocket.on(friendsConstants.SERVER.INVITE_ERROR, errorMessage => {
-            // TODO
-        });
-    }
-
-    searchUsers(username) {
-        this.userSocket.emit(userConstants.CLIENT.SEARCH, { username });
-    }
-
-    sendInvitation(userId) {
-        let { sessionId } = this.props;
-
-        this.friendsSocket.emit(friendsConstants.CLIENT.INVITE, {
-            userId,
-            sessionId,
-        });
     }
 
     render() {
@@ -85,7 +43,7 @@ class SearchPanel extends React.Component {
                                 key={i}
                                 username={user.username}
                                 sendInvitation={() => {
-                                    this.sendInvitation(user.id);
+                                    // TODO
                                 }} />
                         )}
 

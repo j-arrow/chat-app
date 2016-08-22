@@ -1,0 +1,7 @@
+# This is a TOML document
+
+[collections.messages]
+indexes = ["author"]
+
+[groups.default.rules.read_current_user]
+template = "collection('users').find({id: userId()})"
